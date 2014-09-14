@@ -55,7 +55,7 @@ GAME.Images.list = [
         ['weapons',		'img/weapons.png'	],
         ['marker',		'img/flag-red.png'	],
         ['foot',		'img/foot.png'		],
-		['splash_screen', 'img/splash.png'  ],
+		// ['splash_screen', 'img/splash.png'  ],
 
         ['role_1_0',	'img/portraits/role_1_0.gif'	],
         ['role_1_1',	'img/portraits/role_1_1.gif'	],

@@ -51,18 +51,15 @@
 			$(function() {
 				GAME.Init();
 
-				amplify.subscribe('IMAGES_PRELOADED', function() {
-					GAME.progress_control.ClearAll();
-					GAME.Dialogs.DisplayIntroDialog();
-				});
-
 				amplify.subscribe('MAP_GENERATION_COMPLETE', function() {
 					GAME.progress_control.ClearAll();
 					GAME.Run();
 				});
 
-				GAME.progress_control.Add('Loading images..', 'IMAGES_PRELOADED_PROGRESS');
+				GAME.progress_control.Add('Loading images..', 'IMAGES_PRELOADED_PROGRESS', 'IMAGES_PRELOADED');
 				GAME.Images.Preload();
+
+				GAME.Dialogs.DisplayIntroDialog();
 			});
 		</script>
 	</head>
