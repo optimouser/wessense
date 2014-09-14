@@ -782,104 +782,62 @@ GAME.Dialogs.DisplayLandSelectionDialog = function() {
   text += '<tr><td colspan=3><hr></td></tr>';
     text += '<tr><td>Animation Speed</td><td><div id="slider4"></div></td><td><div id="slidertext4"></div></td></tr>';
     text += '</table>';
-    text += '<input type="hidden" id="intro_param_difficulty" value="1.00">';
-    text += '<input type="hidden" id="intro_param_land" value="1.10">';
-    text += '<input type="hidden" id="intro_param_resources" value="1.0">';
-    text += '<input type="hidden" id="intro_param_monsters" value="1.0">';
-    text += '<input type="hidden" id="intro_param_speed" value="1.0">';
+    text += '<input type="hidden" id="intro_param_difficulty">';
+    text += '<input type="hidden" id="intro_param_land">';
+    text += '<input type="hidden" id="intro_param_resources">';
+    text += '<input type="hidden" id="intro_param_monsters">';
+    text += '<input type="hidden" id="intro_param_speed">';
     text += '</div>';
     text += '</div>';
   $('body').append(text);
 
-    var textlabels0 = ['Easy', 'Normal', 'Hard'];
-    var textlabels1 = ['Tiny', 'Small', 'Average', 'Large', 'Huge'];
-    var textlabels2 = ['Very Rare', 'Rare', 'Average', 'Generous', 'Abundant'];
-    var textlabels3 = ['Very Rare', 'Rare', 'Average', 'Plenty', 'Hordes'];
-    var textlabels4 = ['Very Slow', 'Slower', 'Normal', 'Faster', 'Fastest'];
+  var textlabels = [
+    ['Easy', 'Normal', 'Hard'],
+    ['Tiny', 'Small', 'Average', 'Large', 'Huge'],
+    ['Very Rare', 'Rare', 'Average', 'Generous', 'Abundant'],
+    ['Very Rare', 'Rare', 'Average', 'Plenty', 'Hordes'],
+    ['Very Slow', 'Slower', 'Normal', 'Faster', 'Fastest']
+  ];
 
-    var data_difficulty = [0.5, 1.0, 2.0]; // slider 0
-    var data_land     = [1.20, 1.15, 1.10, 1.05, 1.00]; // slider 1
-    var data_resources  = [0.30, 0.60, 1.00, 1.50, 2.00]; // slider 2
-    var data_monsters = [0.50, 0.75, 1.00, 1.25, 2.00]; // slider 3
-    var data_anim_speed = [2.00, 1.50, 1.00, 0.75, 0.50]; // slider 4
+  var values = [
+    [0.5, 1.0, 2.0],
+    [1.20, 1.15, 1.10, 1.05, 1.00],
+    [0.30, 0.60, 1.00, 1.50, 2.00],
+    [0.50, 0.75, 1.00, 1.25, 2.00],
+    [2.00, 1.50, 1.00, 0.75, 0.50]
+  ];
 
-    $('#slidertext0').text( textlabels0[1] );
-    $('#slidertext1').text( textlabels1[2] );
-    $('#slidertext2').text( textlabels2[2] );
-    $('#slidertext3').text( textlabels3[2] );
-    $('#slidertext4').text( textlabels3[2] );
+  var defaults = [ 1, 2, 2, 2, 2];
 
-    $('#slider0').slider({
-        value: window.localStorage['lsd_0'] || 1,
-        min: 0,
-        max: 2,
-        step: 1,
-        slide: function( event, ui ) {
-            $('#slidertext0').text( textlabels0[ui.value] );
-            $('#intro_param_difficulty').val( data_difficulty[ui.value] );
-            window.localStorage['lsd_0'] = ui.value;
-        }
-    });
+  var param_names = ['difficulty', 'land', 'resources', 'monsters', 'speed'];
 
-    $('#slider1').slider({
-        value: window.localStorage['lsd_1'] || 2,
-        min: 0,
-        max: 4,
-        step: 1,
-        slide: function( event, ui ) {
-            $('#slidertext1').text( textlabels1[ui.value] );
-            $('#intro_param_land').val( data_land[ui.value] );
-            window.localStorage['lsd_1'] = ui.value;
-        }
-    });
+  $.each(textlabels, function(i) {
+    $('#slider' + i).slider({
+      min: 0,
+      max: textlabels[i].length - 1,
+      step: 1,
+      slide: function(event, ui) {
+        $('#slidertext' + i).text( textlabels[i][ui.value] );
+      },
+      change: function(event, ui) {
+        $('#slidertext' + i).text( textlabels[i][ui.value] );
+        $('#intro_param_' + param_names[i]).val( values[i][ui.value] );
+        window.localStorage['lsd_' + i] = ui.value;
+      }
+    }).slider('value', window.localStorage['lsd_' + i] || defaults[i]);
+  })
 
-    $('#slider2').slider({
-        value: window.localStorage['lsd_2'] || 2,
-        min: 0,
-        max: 4,
-        step: 1,
-        slide: function( event, ui ) {
-            $('#slidertext2').text( textlabels2[ui.value] );
-            $('#intro_param_resources').val( data_resources[ui.value] );
-            window.localStorage['lsd_2'] = ui.value;
-        }
-    });
-
-    $('#slider3').slider({
-        value: window.localStorage['lsd_3'] || 2,
-        min: 0,
-        max: 4,
-        step: 1,
-        slide: function( event, ui ) {
-            $('#slidertext3').text( textlabels3[ui.value] );
-            $('#intro_param_monsters').val( data_monsters[ui.value] );
-            window.localStorage['lsd_3'] = ui.value;
-        }
-    });
-
-    $('#slider4').slider({
-        value: window.localStorage['lsd_4'] || 2,
-        min: 0,
-        max: 4,
-        step: 1,
-        slide: function( event, ui ) {
-            $('#slidertext4').text( textlabels4[ui.value] );
-            $('#intro_param_speed').val( data_anim_speed[ui.value] );
-            window.localStorage['lsd_4'] = ui.value;
-        }
-    });
-
-    $('#intro_seed').val(Math.random());
-    $("#landselectiondialog").dialog({
-        autoOpen: true,
-         width: 640,
-        height: 410,
+  $('#intro_seed').val(Math.random());
+  $("#landselectiondialog").dialog({
+    autoOpen: true,
+    width: 640,
+    height: 410,
     closeOnEscape: false,
-        modal: true,
-        dialogClass: "no-close",
-        buttons: {
-            'START ADVENTURE': function() {
-                $( this ).dialog( "close" );
+    modal: true,
+    dialogClass: "no-close",
+    buttons: {
+      'START ADVENTURE': function() {
+        $( this ).dialog( "close" );
         GAME.data['game_difficulty'] = parseFloat( $('#intro_param_difficulty').val() );
         GAME.data['map_size_factor'] = parseFloat( $('#intro_param_land').val() );
         GAME.data['resource_factor'] = parseFloat( $('#intro_param_resources').val() );
@@ -887,9 +845,9 @@ GAME.Dialogs.DisplayLandSelectionDialog = function() {
         GAME.data['animation_speed'] = parseFloat( $('#intro_param_speed').val() );
         GAME.data['seed'] = parseFloat( $('#intro_seed').val() );
         GAME.Dialogs.ProceedWithNewGame();
-            }
-        }
-    });
+      }
+    }
+  });
 };
 
 GAME.Dialogs.DisplayHeroSelectionDialog = function() {
