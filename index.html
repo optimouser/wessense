@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+	<head>
+		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+
+		<title>W.Essense, v0.86a</title>
+
+		<link rel="stylesheet" type="text/css" href='css/mint-choc/jquery-ui-1.10.4.custom.css' >
+		<link rel="stylesheet" type="text/css" href='css/intro.css' >
+		<link rel="stylesheet" type="text/css" href='css/hero.css' >
+		<link rel="stylesheet" type="text/css" href='css/styles.css' >
+
+		<script type="text/javascript" src='js/external/jquery/jquery-1.11.0.min.js'></script>
+		<script type="text/javascript" src='js/external/jquery/jquery-ui.min.js'></script>
+
+		<script type="text/javascript" src='js/external/amplify/amplify.js'></script>
+		<script type="text/javascript" src='js/external/keymaster/keymaster.js'></script>
+		<script type="text/javascript" src='js/external/perlinjs/perlin.js'></script>
+		<script type="text/javascript" src='js/external/random/seedrandom.min.js'></script>
+		<script type="text/javascript" src='js/external/pathfinding/pathfinding-browser.min.js'></script>
+
+		<script type="text/javascript" src='js/WS.js'></script>
+		<script type="text/javascript" src='js/WS.ScreenObject.js'></script>
+		<script type="text/javascript" src='js/WS.Animation.js'></script>
+		<script type="text/javascript" src='js/WS.Sprite.js'></script>
+		<script type="text/javascript" src='js/WS.Entity.js'></script>
+		<script type="text/javascript" src='js/WS.LayerControl.js'></script>
+		<script type="text/javascript" src='js/WS.ProgressControl.js'></script>
+		<script type="text/javascript" src='js/WS.Overlay.js'></script>
+		<script type="text/javascript" src='js/WS.RangedEffect.js'></script>
+		<script type="text/javascript" src='js/WS.TextAnimation.js'></script>
+		<script type="text/javascript" src='js/WS.Time.js'></script>
+		<script type="text/javascript" src='js/WS.SpecialAbility.js'></script>
+		<script type="text/javascript" src='js/common.js'></script>
+
+		<script type="text/javascript" src='js/GAME.js'></script>
+		<script type="text/javascript" src='js/GAME.Images.js'></script>
+		<script type="text/javascript" src='js/GAME.Dialogs.js'></script>
+		<script type="text/javascript" src='js/GAME.MapGen.js'></script>
+		<script type="text/javascript" src='js/GAME.Monsters.js'></script>
+		<script type="text/javascript" src='js/GAME.Tiles.js'></script>
+		<script type="text/javascript" src='js/GAME.Objects.js'></script>
+		<script type="text/javascript" src='js/GAME.PlayersControl.js'></script>
+		<script type="text/javascript" src='js/GAME.Display.js'></script>
+		<script type="text/javascript" src='js/GAME.Player.js'></script>
+		<script type="text/javascript" src='js/GAME.func.CreateEffects.js'></script>
+		<script type="text/javascript" src='js/GAME.Notifications.js'></script>
+		<script type="text/javascript" src='js/GAME.Buttons.js'></script>
+
+		<script>
+			$(document).ready( function() {
+				GAME.Init();
+
+				amplify.subscribe('IMAGES_PRELOADED', function() {
+					GAME.progress_control.ClearAll();
+					GAME.Dialogs.DisplayIntroDialog();
+				});
+	
+				amplify.subscribe('MAP_GENERATION_COMPLETE', function() {
+					GAME.progress_control.ClearAll();
+					GAME.Run();
+				});
+
+				GAME.progress_control.Add('Loading images..', 'IMAGES_PRELOADED_PROGRESS');
+				GAME.Images.Preload();
+			});
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

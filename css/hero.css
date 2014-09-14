@@ -1,0 +1,27 @@
+
+#herodialog img {
+	width: 200px;
+	height: 200px;
+	background: radial-gradient(ellipse at center, #f8ffe8 0%,#e3f5ab 33%,#b7df2d 100%); /* W3C */
+	border: 3px solid #FFF;
+	border-radius: 100px;
+	box-shadow: 2px 2px 3px 3px #222;
+	margin-right: 2px;
+	margin-bottom: 2px;
+}
+
+#herodialog img:hover {
+	background: radial-gradient(ellipse at center, #fefcea 0%,#f7bf09 100%); /* W3C */
+	border: 3px solid #FF7700;
+	border-radius: 100px;
+	box-shadow: 2px 2px 3px 3px #222;
+	margin-right: 2px;
+	margin-bottom: 2px;
+}
+
+#hero_desc {
+	font-size: 20px;
+	font-family: monospace, verdana, arial;
+	width: 100%;
+	text-align: center;
+}

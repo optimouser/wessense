@@ -1,0 +1,67 @@
+
+.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset { text-align: center; float: none; }
+
+#introdialog.ui-dialog-content {
+	padding: 0;
+}
+
+#herodialog.ui-dialog-content, #landselectiondialog.ui-dialog-content {
+	background-image: url('../img/background.png');
+	background-repeat: repeat;
+}
+
+.ui-dialog-buttonpane {
+	margin: 0 !important;
+}
+
+#msg_loading, #msg_generating, #msg_populating {
+    font-size: 30px;
+}
+
+#introoptions td {
+	font-size: 18px;
+	font-family: monospace;
+}
+
+#introoptions select {
+    width: 140px;
+    font-size: 18px;
+    font-family: monospace;
+}
+
+#introoptions input {
+    width: 70%;
+    font-size: 18px;
+    font-family: monospace;
+}
+
+#introoptions {
+    width: 100%;
+}
+
+#introoptions td {
+    padding: 5px 5px 5px 5px;
+    border-bottom: 1px dashed #555;
+}
+
+#introoptions th {
+    padding-bottom: 24px;
+    border-bottom: 1px dashed #555;
+	font-size: 18px;
+}
+
+#tabs-3 table td {
+    border-bottom: 1px dashed silver;
+}
+
+#slider1, #slider2, #slider3 {
+    width: 100%;
+}
+
+#next_button {
+	display: none;
+}
+
+#load_game_button {
+	display: none;
+}

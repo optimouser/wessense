@@ -1,0 +1,492 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+	color: #FFF;
+    font-family: monospace !important;
+    font-size: 13px;
+}
+
+#game_minimap, #game_minimap_ptr {
+	border-radius: 256px;
+}
+
+.gm_val {
+	font-size: 50px;
+	line-height: 60px;
+	height: 60px !important;
+	padding: 0;
+	margin: 0;
+	font-family: arial;
+	color: #FFF;
+	text-shadow: 2px 2px #333;
+	display: inline-block;
+	margin-right: 20px;
+	vertical-align: middle;
+}
+
+.img_stat {
+	width: 60px;
+	height: 60px;
+	display: inline-block;
+	vertical-align: bottom;
+	color: white;
+	font-weight: bold;
+	text-align: center;
+	text-shadow: 2px 2px #000;
+	line-height: 60px;
+}
+
+.img_lvl {
+	background-image: url('../img/weapons.png');
+    background-position: 0px -720px;
+}
+
+.img_hth {
+	background-image: url('../img/weapons.png');
+    background-position: 0px -60px;
+}
+
+
+.img_rng {
+	background-image: url('../img/weapons.png');
+    background-position: 0px -180px;
+}
+
+.img_def {
+	background-image: url('../img/weapons.png');
+    background-position: 0px -420px;
+}
+
+.img_hp {
+	background-image: url('../img/weapons.png');
+    background-position: -60px -720px;
+}
+
+.img_exp {
+	background-image: url('../img/weapons.png');
+    background-position: -60px -660px;
+}
+
+.img_money {
+	background-image: url('../img/weapons.png');
+    background-position: -120px -660px;
+}
+
+#exp_bar {
+	width: 100%;
+	display: block;
+	text-align: left;
+	border: 1px solid #000;
+	background-color: #CCC;
+	opacity: 0.5;
+	padding: 0; 
+	margin: 0;
+	margin-top: 10px;
+	position: relative;
+}
+
+#exp_bar_inner {
+	height: 16px;
+	width: 50%;
+	background-color: #AF0;
+	margin: 0; padding: 0;
+}
+
+#exp_bar_text {
+	position: absolute;
+	top: 0;
+	left: 40%;
+	line-height: 18px;
+	font-size: 12px;
+	color: #000;
+	text-shadow: 1px 1px #FFF;
+	margin: 0; padding: 0;
+}
+
+canvas {
+    image-rendering: optimizeSpeed;             // Older versions of FF
+    image-rendering: -moz-crisp-edges;          // FF 6.0+
+    image-rendering: -webkit-optimize-contrast; // Webkit
+                                                //  (Safari now, Chrome soon)
+    image-rendering: -o-crisp-edges;            // OS X & Windows Opera (12.02+)
+    image-rendering: optimize-contrast;         // Possible future browsers.
+    -ms-interpolation-mode: nearest-neighbor;   // IE
+}
+
+.no-close .ui-dialog-titlebar-close {
+    display: none;
+}
+
+.disableSelection {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    outline: 0;
+}
+
+img::-moz-selection {
+    background: transparent;
+}
+
+img, table, td, tr, li {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    outline: 0;
+	margin: 0;
+	padding: 0;
+}
+
+img.desaturate{
+	-webkit-filter: grayscale(100%);
+	filter: grayscale(100%);
+	filter: gray;
+	filter: url("data:image/svg+xml;utf8,<svg version='1.1' xmlns='http://www.w3.org/2000/svg' height='0'><filter id='greyscale'><feColorMatrix type='matrix' values='0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0' /></filter></svg>#greyscale");
+}
+
+.desaturate{
+	-webkit-filter: grayscale(100%);
+	filter: grayscale(100%);
+	filter: gray;
+	filter: url("data:image/svg+xml;utf8,<svg version='1.1' xmlns='http://www.w3.org/2000/svg' height='0'><filter id='greyscale'><feColorMatrix type='matrix' values='0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0' /></filter></svg>#greyscale");
+}
+
+ul, li {
+    list-style-type: none;
+}
+
+#img_evil_flag {
+    background-image: url('../img/tilesets.png');
+    background-position: -648px -3456px;
+	background-color: #CCC;
+    width: 72px;
+    height: 72px;
+    display: inline-block;
+    vertical-align: middle;
+    color: #000;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 2px 2px #000;
+    line-height: 72px;
+}
+
+#img_orc_flag {
+    background-image: url('../img/tilesets.png');
+    background-position: -576px -3456px;
+	background-color: #CCC;
+    width: 72px;
+    height: 72px;
+    display: inline-block;
+    vertical-align: middle;
+    color: #000;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 2px 2px #000;
+    line-height: 72px;
+}
+
+#img_necklace {
+    background-image: url('../img/tilesets.png');
+    background-position: -432px -1512px;
+	background-color: #CCC;
+    width: 72px;
+    height: 72px;
+    display: inline-block;
+    vertical-align: middle;
+    color: #000;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 2px 2px #000;
+    line-height: 72px;
+}
+
+#img_tower_key {
+    background-image: url('../img/tilesets.png');
+    background-position: -648px -1656px;
+	background-color: #CCC;
+    width: 72px;
+    height: 72px;
+    display: inline-block;
+    vertical-align: middle;
+    color: #000;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 2px 2px #000;
+    line-height: 72px;
+}
+
+#img_tower {
+    background-image: url('../img/tilesets.png');
+    background-position: -504px -288px;
+	background-color: #CCC;
+    width: 72px;
+    height: 72px;
+    display: inline-block;
+    vertical-align: middle;
+    color: #000;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 2px 2px #000;
+    line-height: 72px;
+}
+
+#img_holy_book {
+    background-image: url('../img/tilesets.png');
+    background-position: -504px -1512px;
+	background-color: #CCC;
+    width: 72px;
+    height: 72px;
+    display: inline-block;
+    vertical-align: middle;
+    color: #000;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 2px 2px #000;
+    line-height: 72px;
+}
+
+#img_flaming_sword {
+    background-image: url('../img/tilesets.png');
+    background-position: -504px -2376px;
+	background-color: #CCC;
+    width: 72px;
+    height: 72px;
+    display: inline-block;
+    vertical-align: middle;
+    color: #000;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 2px 2px #000;
+    line-height: 72px;
+}
+
+#img_potion_youth {
+    background-image: url('../img/tilesets.png');
+    background-position: -648px -1944px;
+	background-color: #CCC;
+    width: 72px;
+    height: 72px;
+    display: inline-block;
+    vertical-align: middle;
+    color: #000;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 2px 2px #000;
+    line-height: 72px;
+}
+
+#img_mine {
+    background-image: url('../img/tilesets.png');
+    background-position: -576px -2232px;
+	background-color: #CCC;
+    width: 72px;
+    height: 72px;
+    display: inline-block;
+    vertical-align: middle;
+    color: #000;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 2px 2px #000;
+    line-height: 72px;
+}
+
+#img_caged_unicorn {
+    background-image: url('../img/neutrals.png');
+    background-position: 0px -936px;
+	background-color: #CCC;
+    width: 72px;
+    height: 72px;
+    display: inline-block;
+    vertical-align: middle;
+    color: #000;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 2px 2px #000;
+    line-height: 72px;
+}
+
+#img_fugitive {
+	background-image: url(../img/enemies.png);
+	background-position: 0px -3024px;
+	background-color: #CCC;
+    width: 72px;
+    height: 72px;
+    display: inline-block;
+    vertical-align: middle;
+    color: #000;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 2px 2px #000;
+    line-height: 72px;
+}
+
+.q1, .q2, .q3, .q4 {
+	color: #000;
+	border-bottom: 1px solid #999;
+	text-shadow: 1px 1px #FFF;
+	font-size: 14px;
+}
+
+.q1 {
+	background-color: #CCC;
+}
+.q2 {
+	background-color: #BBB;
+}
+.q3 {
+	background-color: #BBB;
+}
+.q4 {
+	background-color: #CCC;
+}
+
+table, tr, td {
+	padding: 0;
+	margin: 0;
+	border-collapse: collapse;
+}
+
+#herodialog table td {
+	padding: 4px;
+}
+
+#gm_spells_container {
+	position: fixed;
+    top: 375px;
+    right: 0px;
+    width: 246px;
+    height: 246px;
+	z-index: 10;
+	text-align: center;
+	display: none;
+}
+
+.gm_spells {
+	margin: 10px;
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    font-size: 13px;
+    line-height: 20px;
+    vertical-align: bottom;
+    font-weight: bold;
+    color: #FFF;
+    border: 1px solid #F0F;
+    font-family: monospace;
+    text-shadow: 1px 1px #000;
+    display: inline-block;
+	cursor: pointer;
+    box-shadow: 4px 4px 2px #333;
+}
+
+.gm_spell_fly {
+	background-image: url(../img/weapons.png);
+	background-position: 0px -1440px;
+}
+
+.gm_spell_mirror {
+	background-image: url(../img/weapons.png);
+	background-position: 0px -1380px;
+}
+
+.gm_spell_rain {
+	background-image: url(../img/weapons.png);
+	background-position: -60px -1440px;
+}
+
+.gm_spell_frenzy {
+	background-image: url(../img/weapons.png);
+	background-position: -60px -1500px;
+}
+
+.gm_spell_entangle {
+	background-image: url(../img/weapons.png);
+	background-position: 0px -1560px;
+}
+
+.gm_spell_tornado {
+	background-image: url(../img/weapons.png);
+	background-position: 0px -1500px;
+}
+
+.gm_spell_sleep {
+	background-image: url(../img/weapons.png);
+	background-position: -60px -1380px;
+}
+
+.gm_spell_charm {
+	background-image: url(../img/weapons.png);
+	background-position: -120px -1380px;
+}
+
+.gm_spell_forest {
+	background-image: url(../img/weapons.png);
+	background-position: -120px -1560px;
+}
+
+.gm_spell_swords {
+	background-image: url(../img/weapons.png);
+	background-position: -60px -1500px;
+}
+
+.gm_spell_dynamite {
+	background-image: url(../img/weapons.png);
+	background-position: -120px -1500px;
+}
+
+.gm_spell_meteor {
+	background-image: url(../img/weapons.png);
+	background-position: -60px -900px;
+}
+
+.gm_spell_shadows {
+	background-image: url(../img/weapons.png);
+	background-position: -60px -1560px;
+}
+
+.gm_spell_heal {
+	background-image: url(../img/weapons.png);
+	background-position: -60px -840px;
+}
+
+.button_shop_magic_buy {
+	width: 160px;
+	border: 1px solid white;
+	color: #FFF;
+	background-color: #070;
+	font-weight: bold;
+	font-size: 24px !important;
+	padding: 2px;
+	text-align: center;
+	display: none;
+}
+
+.button_shop_magic_sell {
+	width: 160px;
+	border: 1px solid white;
+	color: #FFF;
+	background-color: #FF9F00;
+	font-weight: bold;
+	font-size: 24px !important;
+	padding: 2px;
+	text-align: center;
+	display: none;
+}
+
+.tbl_gamescore, .tbl_gamescore tr td {
+	font-size: 18px;
+	font-weight: bold;
+	color: #FFF;
+	padding: 3px;
+}
+
+.tbl_gamescore div {
+	display: inline-block;
+}

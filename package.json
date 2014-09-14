@@ -1,0 +1,18 @@
+{
+  "name": "wessense",
+  "version": "0.85a",
+  "description": "W.Essense: Online Rogue-like, inspired by Battle for Wesnoth and Wayward projects",
+  "author": "Shadow Walker",
+  "private": true,
+  "dependencies": {
+    "grunt": "~0.4.4",
+    "grunt-node-webkit-builder": "~0.1.2"
+  },
+  "main": "index.html",
+  "window": {
+    "toolbar": false,
+    "width": 800,
+    "height": 600
+  },
+  "license": "MIT"
+}
