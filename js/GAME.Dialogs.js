@@ -808,57 +808,62 @@ GAME.Dialogs.DisplayLandSelectionDialog = function() {
     $('#slidertext4').text( textlabels3[2] );
 
     $('#slider0').slider({
-        value:1,
+        value: window.localStorage['lsd_0'] || 1,
         min: 0,
         max: 2,
         step: 1,
         slide: function( event, ui ) {
             $('#slidertext0').text( textlabels0[ui.value] );
             $('#intro_param_difficulty').val( data_difficulty[ui.value] );
+            window.localStorage['lsd_0'] = ui.value;
         }
     });
 
     $('#slider1').slider({
-        value:2,
+        value: window.localStorage['lsd_1'] || 2,
         min: 0,
         max: 4,
         step: 1,
         slide: function( event, ui ) {
             $('#slidertext1').text( textlabels1[ui.value] );
             $('#intro_param_land').val( data_land[ui.value] );
+            window.localStorage['lsd_1'] = ui.value;
         }
     });
 
     $('#slider2').slider({
-        value:2,
+        value: window.localStorage['lsd_2'] || 2,
         min: 0,
         max: 4,
         step: 1,
         slide: function( event, ui ) {
             $('#slidertext2').text( textlabels2[ui.value] );
             $('#intro_param_resources').val( data_resources[ui.value] );
+            window.localStorage['lsd_2'] = ui.value;
         }
     });
 
     $('#slider3').slider({
-        value:2,
+        value: window.localStorage['lsd_3'] || 2,
         min: 0,
         max: 4,
         step: 1,
         slide: function( event, ui ) {
             $('#slidertext3').text( textlabels3[ui.value] );
             $('#intro_param_monsters').val( data_monsters[ui.value] );
+            window.localStorage['lsd_3'] = ui.value;
         }
     });
 
     $('#slider4').slider({
-        value:2,
+        value: window.localStorage['lsd_4'] || 2,
         min: 0,
         max: 4,
         step: 1,
         slide: function( event, ui ) {
             $('#slidertext4').text( textlabels4[ui.value] );
             $('#intro_param_speed').val( data_anim_speed[ui.value] );
+            window.localStorage['lsd_4'] = ui.value;
         }
     });
 
