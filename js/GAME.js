@@ -920,6 +920,17 @@ GAME.Update = function(dt) {
 			key_pressed = 'ignore';
 		};
 
+		if ( key.isPressed('a') ) {
+			var c = GAME.player.GetGameXY();
+			var targets = key.shift ? ['aggressive','angered','frenzied', 'neutral'] : ['aggressive','angered','frenzied'];
+			var target = GAME.Monsters.FindNearestMonsterInRadius(c.x, c.y, GAME.player.GetRangedRange(), targets);
+			if (target) {
+				GAME.player.tryAttack(target);
+				this.mLastKeyPress = 0;
+				key_pressed = 'ignore';
+			}
+		}
+
 		if ( key_pressed === false && key.isPressed('left') ) {
 			GAME.player.SetFlipX(true);
 			if ( GAME.player.MoveToDXY( -1, 0 ) === true ) {
