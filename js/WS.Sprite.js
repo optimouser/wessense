@@ -1,14 +1,14 @@
 //
-// WS.Sprite 
+// WS.Sprite
 //
-// Description: 
+// Description:
 //
 
 WS.Sprite = function( opt ) {
 	if ( opt === undefined ) { throw 'Cannot create WS.Sprite, constructor parameters missing'; }
 	if ( opt.canvas === undefined ) { throw "Cannot create WS.Sprite, canvas is missing"; }
 	if ( opt.animations === undefined ) { throw "Cannot create WS.Sprite, animations are missing"; }
-	
+
 	WS.ScreenObject.call( this, opt );
 
 	this.mCanvas = ( opt.canvas !== undefined ) ? opt.canvas : undefined;
@@ -146,7 +146,7 @@ WS.Sprite.prototype.RenderCharmed = function() {
 	var scale = GAME.Display.mScaleFactor;
 	var img = GAME.Images.Get('markers');
 	this.mCtx.save();
-	this.mCtx.translate( this.mX + this.mOffsetX + GAME.Display.mOutDX / 2 - 12 * scale, 
+	this.mCtx.translate( this.mX + this.mOffsetX + GAME.Display.mOutDX / 2 - 12 * scale,
 		this.mY - GAME.Display.mOutDY / 2 + this.mOffsetY + 30 * scale );
     this.mCtx.drawImage( img, 0, 144, 24, 24,
         parseInt(-12 * scale),
@@ -161,7 +161,7 @@ WS.Sprite.prototype.RenderFlying = function() {
 	var scale = GAME.Display.mScaleFactor;
 	var img = GAME.Images.Get('markers');
 	this.mCtx.save();
-	this.mCtx.translate( this.mX - GAME.Display.mOutDX / 2 + this.mOffsetX, 
+	this.mCtx.translate( this.mX - GAME.Display.mOutDX / 2 + this.mOffsetX,
 		this.mY - GAME.Display.mOutDY / 2 + this.mOffsetY );
     this.mCtx.drawImage( img, 0, 72, 24, 24,
         0,
@@ -176,7 +176,7 @@ WS.Sprite.prototype.RenderHidden = function() {
 	var scale = GAME.Display.mScaleFactor;
 	var img = GAME.Images.Get('markers');
 	this.mCtx.save();
-	this.mCtx.translate( this.mX - GAME.Display.mOutDX / 2 + this.mOffsetX, 
+	this.mCtx.translate( this.mX - GAME.Display.mOutDX / 2 + this.mOffsetX,
 		this.mY - GAME.Display.mOutDY / 2 + this.mOffsetY );
     this.mCtx.drawImage( img, 0, 96, 24, 24,
         0,
@@ -191,7 +191,7 @@ WS.Sprite.prototype.RenderEntangled = function() {
 	var scale = GAME.Display.mScaleFactor;
 	var img = GAME.Images.Get('markers');
 	this.mCtx.save();
-	this.mCtx.translate( this.mX - GAME.Display.mOutDX / 2 + this.mOffsetX, 
+	this.mCtx.translate( this.mX - GAME.Display.mOutDX / 2 + this.mOffsetX,
 		this.mY - GAME.Display.mOutDY / 2 + this.mOffsetY );
     this.mCtx.drawImage( img, 0, 240, 24, 24,
         0,
@@ -206,7 +206,7 @@ WS.Sprite.prototype.RenderPoisoned = function() {
 	var scale = GAME.Display.mScaleFactor;
 	var img = GAME.Images.Get('markers');
 	this.mCtx.save();
-	this.mCtx.translate( this.mX - GAME.Display.mOutDX / 2 + this.mOffsetX, 
+	this.mCtx.translate( this.mX - GAME.Display.mOutDX / 2 + this.mOffsetX,
 		this.mY - GAME.Display.mOutDY / 2 + this.mOffsetY );
     this.mCtx.drawImage( img, 0, 216, 24, 24,
         parseInt(18 * scale),
@@ -221,7 +221,7 @@ WS.Sprite.prototype.RenderBleeding = function() {
 	var scale = GAME.Display.mScaleFactor;
 	var img = GAME.Images.Get('markers');
 	this.mCtx.save();
-	this.mCtx.translate( this.mX - GAME.Display.mOutDX / 2 + this.mOffsetX, 
+	this.mCtx.translate( this.mX - GAME.Display.mOutDX / 2 + this.mOffsetX,
 		this.mY - GAME.Display.mOutDY / 2 + this.mOffsetY );
     this.mCtx.drawImage( img, 0, 48, 24, 24,
         parseInt(30 * scale),
@@ -236,7 +236,7 @@ WS.Sprite.prototype.RenderFrenzied = function() {
 	var scale = GAME.Display.mScaleFactor;
 	var img = GAME.Images.Get('markers');
 	this.mCtx.save();
-	this.mCtx.translate( this.mX - GAME.Display.mOutDX / 2 + this.mOffsetX, 
+	this.mCtx.translate( this.mX - GAME.Display.mOutDX / 2 + this.mOffsetX,
 		this.mY - GAME.Display.mOutDY / 2 + this.mOffsetY );
     this.mCtx.drawImage( img, 0, 264, 24, 24,
         parseInt(48 * scale),
@@ -251,7 +251,7 @@ WS.Sprite.prototype.RenderSleeping = function() {
 	var scale = GAME.Display.mScaleFactor;
 	var img = GAME.Images.Get('markers');
 	this.mCtx.save();
-	this.mCtx.translate( this.mX - GAME.Display.mOutDX / 2 + this.mOffsetX, 
+	this.mCtx.translate( this.mX - GAME.Display.mOutDX / 2 + this.mOffsetX,
 		this.mY - GAME.Display.mOutDY / 2 + this.mOffsetY );
     this.mCtx.drawImage( img, 0, 192, 24, 24,
         0,
@@ -266,7 +266,7 @@ WS.Sprite.prototype.RenderBoss = function() {
 	var scale = GAME.Display.mScaleFactor;
 	var img = GAME.Images.Get('markers');
 	this.mCtx.save();
-	this.mCtx.translate( this.mX - 12 * scale + this.mOffsetX, 
+	this.mCtx.translate( this.mX - 12 * scale + this.mOffsetX,
 		this.mY - GAME.Display.mOutDY / 2 - 12 * scale + this.mOffsetY );
     this.mCtx.drawImage( img, 0, 120, 24, 24,
         0,
@@ -280,13 +280,13 @@ WS.Sprite.prototype.RenderBoss = function() {
 WS.Sprite.prototype.RenderI = function( hp_pct, level ) {
 	var scale = GAME.Display.mScaleFactor;
 	this.mCtx.save();
-	this.mCtx.translate( this.mX + this.mOffsetX + GAME.Display.mOutDX / 2 - 12 * scale, 
+	this.mCtx.translate( this.mX + this.mOffsetX + GAME.Display.mOutDX / 2 - 12 * scale,
 		this.mY - GAME.Display.mOutDY / 2 + this.mOffsetY + 12 * scale );
     this.mCtx.beginPath();
-    this.mCtx.arc( 
+    this.mCtx.arc(
 		this.mOffsetX,
         this.mOffsetY,
-        9 * scale, 
+        9 * scale,
 		0, 2 * Math.PI,
 		false );
     this.mCtx.fillStyle = this.mTagColor;
@@ -297,11 +297,11 @@ WS.Sprite.prototype.RenderI = function( hp_pct, level ) {
     this.mCtx.closePath();
 
     this.mCtx.beginPath();
-    this.mCtx.arc( 
+    this.mCtx.arc(
 		this.mOffsetX,
         this.mOffsetY,
-        10 * scale, 
-		-Math.PI/2, 
+        10 * scale,
+		-Math.PI/2,
 		-Math.PI/2 + 2 * Math.PI * hp_pct,
 		false );
 
@@ -317,7 +317,7 @@ WS.Sprite.prototype.RenderI = function( hp_pct, level ) {
     this.mCtx.fillStyle = "#000";
     this.mCtx.font = 'bold ' + Math.floor( 10 * scale ) + "px monospace";
     var factor = level < 10 ? 1.0 : 1.85;
-    this.mCtx.fillText(	level,   
+    this.mCtx.fillText(	level,
 		this.mOffsetX - factor * scale * 3,
         this.mOffsetY + scale * 4
 	);
@@ -326,7 +326,10 @@ WS.Sprite.prototype.RenderI = function( hp_pct, level ) {
 };
 
 WS.Sprite.prototype.SetCurrentAnimation = function( animation_name, callback_func ) {
-	if ( this.mCurrentAnimation == animation_name ) { return; }
+	if ( this.mCurrentAnimation == animation_name ) {
+    callback_func && callback_func();
+    return;
+  }
 
 	if ( this.mCallbackFunc !== undefined ) {
 		//console.log( 'executing old callback before override:' );
