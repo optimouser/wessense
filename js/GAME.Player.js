@@ -148,7 +148,7 @@ GAME.Player.prototype.MoveToDXY = function( dx, dy ) {
 	if ( monster !== false ) { return false; }
 
 	// okay, our path is clear:
-	if ( GAME.overlays[ tile ] !== undefined && this.mIsFlying === false ) { 
+	if ( GAME.overlays[ tile ] !== undefined && this.mIsFlying === false ) {
 		var ship = GAME.data['position_ship'];
 		if ( c.x === ship.x && c.y === ship.y ) {
 			this.RemoveOverlay();
@@ -160,15 +160,15 @@ GAME.Player.prototype.MoveToDXY = function( dx, dy ) {
 		} else {
 			this.SetOverlay( GAME.overlays[ tile ] );
 			//this.AddEffect( $.extend( {}, GAME.effects['watersplash'] ) );
-		} 
-	} else { 
-		this.RemoveOverlay(); 
+		}
+	} else {
+		this.RemoveOverlay();
 	}
 
-	if ( dx < 0 && this.mFlipX === false ) { 
-		this.SetFlipX( true ); 
-	} else if ( dx > 0 && this.mFlipX === true ) { 
-		this.SetFlipX( false ); 
+	if ( dx < 0 && this.mFlipX === false ) {
+		this.SetFlipX( true );
+	} else if ( dx > 0 && this.mFlipX === true ) {
+		this.SetFlipX( false );
 	}
 	this.SetGameXY( c.x, c.y );
 	this.PickObjectIfAny();
@@ -194,10 +194,9 @@ GAME.Player.prototype.MoveToDXY = function( dx, dy ) {
 };
 
 GAME.Player.prototype.CanMoveIntoTile = function( tiletype ) {
-	if ( this.mIsFlying === true ) { return true; }
-	return ( this.IsTilePassable( tiletype ) );
+	return this.mIsFlying || this.IsTilePassable( tiletype ) ;
 };
-            
+
 GAME.Player.prototype.CanMoveIntoObject = function( objtype ) {
 	if ( this.mIsFlying === true ) { return true; }
 	if ( objtype === undefined ) { return true; }
@@ -279,7 +278,7 @@ GAME.Player.prototype.PickObjectIfAny = function() {
 			GAME.data['position_book_postament'] = undefined;
 			should_destroy = true;
 			GAME.Notifications.Post('Quest Complete: Dwarven Holy Book found!','good', 5000);
-			// dwarven defenders of the book = surprise!						
+			// dwarven defenders of the book = surprise!
 			pos = GAME.MapGen.SearchRadius( GAME.player.mGameX, GAME.player.mGameY, [ 'swamp_shallow', 'swamp_deep', 'grass', 'mud', 'dirt', 'soil', 'snow', 'desert' ] );
 			var runesmith = GAME.Monsters.Create( 'dwarven_runesmith', pos.x, pos.y );
 			runesmith.SetState('angered');
@@ -318,7 +317,7 @@ GAME.Player.prototype.PickObjectIfAny = function() {
 				GAME.AddTextAnimation('+1 HTH', this.mGameX, this.mGameY, '#00E');
 			} else {
 				var cash = 1;
-				if ( GAME.data['role'].startsWith('role_3') === true ) { cash = 2; } 
+				if ( GAME.data['role'].startsWith('role_3') === true ) { cash = 2; }
 				this.mCash += cash;
 				GAME.AddTextAnimation('+'+cash+' Gold', this.mGameX, this.mGameY, '#EE0');
 				this.GetXP( 10 );
@@ -332,7 +331,7 @@ GAME.Player.prototype.PickObjectIfAny = function() {
 				GAME.AddTextAnimation('+1 HTH', this.mGameX, this.mGameY, '#00E');
 			} else {
 				var cash = 1;
-				if ( GAME.data['role'].startsWith('role_3') === true ) { cash = 2; } 
+				if ( GAME.data['role'].startsWith('role_3') === true ) { cash = 2; }
 				this.mCash += cash;
 				GAME.AddTextAnimation('+'+cash+' Gold', this.mGameX, this.mGameY, '#EE0');
 				this.GetXP( 10 );
@@ -346,7 +345,7 @@ GAME.Player.prototype.PickObjectIfAny = function() {
 				GAME.AddTextAnimation('+1 Ranged', this.mGameX, this.mGameY, '#00E');
 			} else {
 				var cash = 1;
-				if ( GAME.data['role'].startsWith('role_3') === true ) { cash = 2; } 
+				if ( GAME.data['role'].startsWith('role_3') === true ) { cash = 2; }
 				this.mCash += cash;
 				GAME.AddTextAnimation('+'+cash+' Gold', this.mGameX, this.mGameY, '#EE0');
 				this.GetXP( 10 );
@@ -360,7 +359,7 @@ GAME.Player.prototype.PickObjectIfAny = function() {
 				GAME.AddTextAnimation('+2 Ranged', this.mGameX, this.mGameY, '#00E');
 			} else {
 				var cash = 1;
-				if ( GAME.data['role'].startsWith('role_3') === true ) { cash = 2; } 
+				if ( GAME.data['role'].startsWith('role_3') === true ) { cash = 2; }
 				this.mCash += cash;
 				GAME.AddTextAnimation('+'+cash+' Gold', this.mGameX, this.mGameY, '#EE0');
 				this.GetXP( 10 );
@@ -375,7 +374,7 @@ GAME.Player.prototype.PickObjectIfAny = function() {
 				GAME.AddTextAnimation('+1 Ranged', this.mGameX, this.mGameY, '#00E');
 			} else {
 				var cash = 1;
-				if ( GAME.data['role'].startsWith('role_3') === true ) { cash = 2; } 
+				if ( GAME.data['role'].startsWith('role_3') === true ) { cash = 2; }
 				this.mCash += cash;
 				GAME.AddTextAnimation('+'+cash+' Gold', this.mGameX, this.mGameY, '#EE0');
 				this.GetXP( 10 );
@@ -389,7 +388,7 @@ GAME.Player.prototype.PickObjectIfAny = function() {
 				GAME.AddTextAnimation('+1 Ranged', this.mGameX, this.mGameY, '#00E');
 			} else {
 				var cash = 1;
-				if ( GAME.data['role'].startsWith('role_3') === true ) { cash = 2; } 
+				if ( GAME.data['role'].startsWith('role_3') === true ) { cash = 2; }
 				this.mCash += cash;
 				GAME.AddTextAnimation('+'+cash+' Gold', this.mGameX, this.mGameY, '#EE0');
 				this.GetXP( 10 );
@@ -406,7 +405,7 @@ GAME.Player.prototype.PickObjectIfAny = function() {
 				GAME.AddTextAnimation('+1 Ranged', this.mGameX, this.mGameY, '#00E');
 			} else {
 				var cash = 1;
-				if ( GAME.data['role'].startsWith('role_3') === true ) { cash = 2; } 
+				if ( GAME.data['role'].startsWith('role_3') === true ) { cash = 2; }
 				this.mCash += cash;
 				GAME.AddTextAnimation('+'+cash+' Gold', this.mGameX, this.mGameY, '#EE0');
 				this.GetXP( 10 );
@@ -428,8 +427,8 @@ GAME.Player.prototype.PickObjectIfAny = function() {
 			break;
 
 		case 'bonus_potion_health':
-			if ( $.gmRndInt(1,3) === 1 ) { 
-				this.mHP[1] += 1; 
+			if ( $.gmRndInt(1,3) === 1 ) {
+				this.mHP[1] += 1;
 				GAME.AddTextAnimation('+1 Max HP', this.mGameX, this.mGameY, '#E00');
 			}
 			this.mIsBleeding = false;
@@ -603,34 +602,34 @@ GAME.Player.prototype.PickObjectIfAny = function() {
 
 		case 'bonus_gold_small':
 			var cash = $.gmRndInt(1,4);
-			if ( GAME.data['role'].startsWith('role_3') === true ) { cash *= 2; } 
+			if ( GAME.data['role'].startsWith('role_3') === true ) { cash *= 2; }
 			this.mCash += cash;
 			GAME.AddTextAnimation('+'+cash+' Gold', this.mGameX, this.mGameY, '#EE0');
 			should_destroy = true;
 			this.GetXP( 10 );
 			GAME.AddTextAnimation('+10 Exp', this.mGameX, this.mGameY);
-			break;	
+			break;
 		case 'bonus_gold_medium':
 			var cash = $.gmRndInt(4,6);
-			if ( GAME.data['role'].startsWith('role_3') === true ) { cash *= 2; } 
+			if ( GAME.data['role'].startsWith('role_3') === true ) { cash *= 2; }
 			this.mCash += cash;
 			GAME.AddTextAnimation('+'+cash+' Gold', this.mGameX, this.mGameY, '#EE0');
 			should_destroy = true;
 			this.GetXP( 10 );
 			GAME.AddTextAnimation('+10 Exp', this.mGameX, this.mGameY);
-			break;	
+			break;
 		case 'bonus_gold_large':
 			var cash = $.gmRndInt(6,10);
-			if ( GAME.data['role'].startsWith('role_3') === true ) { cash *= 2; } 
+			if ( GAME.data['role'].startsWith('role_3') === true ) { cash *= 2; }
 			this.mCash += cash;
 			GAME.AddTextAnimation('+'+cash+' Gold', this.mGameX, this.mGameY, '#EE0');
 			should_destroy = true;
 			this.GetXP( 10 );
 			GAME.AddTextAnimation('+10 Exp', this.mGameX, this.mGameY);
-			break;	
+			break;
 		case 'bonus_chest_gold':
 			var cash = $.gmRndInt(8,14);
-			if ( GAME.data['role'].startsWith('role_3') === true ) { cash *= 2; } 
+			if ( GAME.data['role'].startsWith('role_3') === true ) { cash *= 2; }
 			this.mCash += cash;
 			GAME.AddTextAnimation('+'+cash+' Gold', this.mGameX, this.mGameY, '#EE0');
 			should_destroy = true;
@@ -639,31 +638,31 @@ GAME.Player.prototype.PickObjectIfAny = function() {
 			break;
 		case 'bonus_barrel_floating':
 			var cash = 1;
-			if ( GAME.data['role'].startsWith('role_3') === true ) { cash = 2; } 
+			if ( GAME.data['role'].startsWith('role_3') === true ) { cash = 2; }
 			this.mCash += cash;
 			GAME.AddTextAnimation('+'+cash+' Gold', this.mGameX, this.mGameY, '#EE0');
 
 			var gain = $.gmRndInt(0,1);
-			if ( gain === 1 ) { 
+			if ( gain === 1 ) {
 				this.mHP[1] += gain;
 				GAME.AddTextAnimation('+'+gain+' Max HP', this.mGameX, this.mGameY, '#E00');
 			}
 
 			gain = $.gmRndInt(0,100);
-			if ( gain < 20 && this.mHTH > 0 ) { 
+			if ( gain < 20 && this.mHTH > 0 ) {
 				this.mHTH += 1;
 				GAME.AddTextAnimation('+1 HTH', this.mGameX, this.mGameY, '#00E');
 			}
 
 			gain = $.gmRndInt(0,100);
-			if ( gain < 20 && this.mRNG > 0) { 
+			if ( gain < 20 && this.mRNG > 0) {
 				this.mRNG += 1;
 				GAME.AddTextAnimation('+1 Ranged', this.mGameX, this.mGameY, '#00E');
 			}
 
 			if ( this.mDEF < 30 ) {
 				gain = $.gmRndInt(0,1);
-				if ( gain === 1 ) { 
+				if ( gain === 1 ) {
 					this.mDEF += gain;
 					GAME.AddTextAnimation('+'+gain+' Armor', this.mGameX, this.mGameY, '#0E0');
 				}
@@ -679,3 +678,24 @@ GAME.Player.prototype.PickObjectIfAny = function() {
 		this.UpdateOverlay();
 	}
 };
+
+GAME.Player.prototype.tryAttack = function(monster) {
+	var mcoord = monster.GetGameXY();
+	this.SetFlipX( this.mGameX > mcoord.x );
+	if ( this.HasHTHAttack() && monster.DistanceTo( this ) <= 1.01 ) {
+//				console.log('performing hth attack');
+		GAME.EntityAttacksEntityHTH(this, monster, function() {
+//					console.log('player hth attack ended');
+			amplify.publish('TURN_ENEMY_START');
+		});
+	} else if ( this.HasRangedAttack() === true
+			&& monster.DistanceTo( this ) <= this.GetRangedRange()
+			&& this.CheckLosToXY( mcoord.x, mcoord.y ) === true
+		) {
+//				console.log('queuing player attack animation');
+		GAME.EntityAttacksEntityRNG(this, monster, function() {
+//					console.log('player rng attack ended');
+			amplify.publish('TURN_ENEMY_START');
+		});
+	}
+}

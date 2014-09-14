@@ -1,7 +1,7 @@
 
 var GAME = GAME || {
 	REVISION: '0.86a',
-	data: { 'role': 'role_1_0', 'houses': 0, 'mines': 0, 'monoliths': 0, 
+	data: { 'role': 'role_1_0', 'houses': 0, 'mines': 0, 'monoliths': 0,
 		'hostage': $.gmRndInt(0,1) == 0 ? 'elven_princess' : 'elder_mage',
 		'enemy': $.gmRndInt(0,1) == 0 ? 'necromancer' : 'lich',
 		'necromancer_name': 'Necromancer Gaghor Deathwhisper',
@@ -54,12 +54,12 @@ GAME.Init = function() {
 		'font-family': 'monospace',
 		'margin-left': '-250px'
 	});
-	
-	this.layer_control = new WS.LayerControl({ 
-		'container_name': 'body', 
-		'default_width' : $(window).width(), 
-		'default_height': $(window).height(), 
-		'enable_caching': true 
+
+	this.layer_control = new WS.LayerControl({
+		'container_name': 'body',
+		'default_width' : $(window).width(),
+		'default_height': $(window).height(),
+		'enable_caching': true
 	});
 
 	this.Display.Init();
@@ -84,7 +84,7 @@ GAME.RunInit = function() {
 	this.overlays['swamp_shallow']    = new WS.Overlay({ img: GAME.Images.Get('tilesets'), x: 360, y: 1917, w: 72, h: 27, dest_x: -36, dest_y: 9, scale_w: 1, scale_h: 1 });
 	this.overlays['swamp_deep']    = new WS.Overlay({ img: GAME.Images.Get('tilesets'), x: 360, y: 2133, w: 72, h: 27, dest_x: -36, dest_y: 9, scale_w: 1, scale_h: 1 });
 
-	// PLAYER INIT: 
+	// PLAYER INIT:
 	var p = GAME.PlayersControl.GetPreset( GAME.data['role'] );
 	var opts = {
         // entity
@@ -100,8 +100,8 @@ GAME.RunInit = function() {
         'current_animation': 'idle',
         'default_animation': 'idle',
         // screen object
-		'x': GAME.Display.mTileSize.hw * GAME.Display.mOutDX + GAME.Display.mOutDX / 2, 
-		'y': GAME.Display.mTileSize.hh * GAME.Display.mOutDY + GAME.Display.mOutDY / 2, 
+		'x': GAME.Display.mTileSize.hw * GAME.Display.mOutDX + GAME.Display.mOutDX / 2,
+		'y': GAME.Display.mTileSize.hh * GAME.Display.mOutDY + GAME.Display.mOutDY / 2,
         'name': 'Ivan', 'type': 'player'
     };
 
@@ -123,7 +123,7 @@ GAME.RunInit = function() {
 	GAME.player.mStats['monoliths_visited'][1] 	= GAME.data['monoliths'];
 	GAME.player.mStats['monsters_killed'][1] 	= GAME.Monsters.CountMonsters();
 	//console.log(GAME.player.mStats);
-	
+
 	if ( GAME.data['role'] === 'role_1_0' ) {
 		GAME.player.mMagic.mirror 	= 4;
 		GAME.player.mMagic.heal 	= 8;
@@ -178,13 +178,13 @@ GAME.RunInit = function() {
 		// def rating
 		var calc_def = undefined, calc_def_color = "#6F6";
 
-        if ( dir.x === 0 && dir.y === 0 ) { 
+        if ( dir.x === 0 && dir.y === 0 ) {
 			calc_def = GAME.player.GetDefSum( GAME.player, GAME.player.mGameX, GAME.player.mGameY, true );
 			GAME.layer_control.ClearLayer('mouse');
             GAME.layer_control.SetLayerCSS('mouse', {'cursor': 'url(img/cursors/move_drag.png),auto'});
 			if ( calc_def !== undefined ) { GAME.Display.DrawTileDef( calc_def, calc_def_color ); }
         	GAME.Display.mMouseTileX = dir.x; GAME.Display.mMouseTileY = dir.y;
-			return; 
+			return;
 		}
         // mouse following: automatic walk path to XY
         if ( dir.x != GAME.Display.mMouseTileX || dir.y != GAME.Display.mMouseTileY ) {
@@ -226,12 +226,12 @@ GAME.RunInit = function() {
     $( mouse_layer_id ).on( "click", function( event ) {
 //		console.log('mouse click registered');
 
-		if ( GAME.mDisableControls === true ) { 
+		if ( GAME.mDisableControls === true ) {
 			if ( GAME.data['active_spell'] !== undefined ) {
 				GAME.ProcessSpellClick( GAME.Display.ScreenToTileXY(event.pageX, event.pageY) );
 				GAME.mDisableControls = false;
 			}
-			return; 
+			return;
 		}
 //		console.log('controls not disabled');
         var dir = GAME.Display.ScreenToTileXY( event.pageX, event.pageY );
@@ -251,24 +251,7 @@ GAME.RunInit = function() {
 //		console.log('checking for monster');
 		if ( monster !== false && GAME.mTimeStop === 0 ) {
 //			console.log('monster is there..');
-			var mcoord = monster.GetGameXY();
-			if ( GAME.player.mGameX > mcoord.x ) { GAME.player.SetFlipX( true ); } else { GAME.player.SetFlipX( false ); }
-			if ( GAME.player.HasHTHAttack() && monster.DistanceTo( GAME.player ) <= 1.01 ) {
-//				console.log('performing hth attack');
-				GAME.EntityAttacksEntityHTH(GAME.player, monster, function() {
-//					console.log('player hth attack ended');
-					amplify.publish('TURN_ENEMY_START');
-				});
-			} else if ( GAME.player.HasRangedAttack() === true 
-					&& monster.DistanceTo( GAME.player ) <= GAME.player.GetRangedRange() 
-					&& GAME.player.CheckLosToXY( mcoord.x, mcoord.y ) === true
-				) {
-//				console.log('queuing player attack animation');
-				GAME.EntityAttacksEntityRNG(GAME.player, monster, function() {
-//					console.log('player rng attack ended');
-					amplify.publish('TURN_ENEMY_START');
-				});	
-			}
+			GAME.player.tryAttack(monster);
 		} else {
 			// check if we need to set path to this point:
             var path = GAME.Display.GetPossiblePath(pcoord.x, pcoord.y, pcoord.x + dir.x, pcoord.y + dir.y);
@@ -283,7 +266,7 @@ GAME.RunInit = function() {
 		return false;
 	}).mouseup( function(e) { return false; } );
 
-	amplify.subscribe('SPELL_CAST', function(spell) { 
+	amplify.subscribe('SPELL_CAST', function(spell) {
 		GAME.player.mStats['spells_cast'] += 1;
 		GAME.data['active_spell'] = spell;
 		switch(spell) {
@@ -373,8 +356,8 @@ GAME.RunInit = function() {
 		}
 		if ( GAME.player.mIsFlying === true ) {
 			GAME.mSpellFlyingCountDown -= 1;
-			if ( GAME.mSpellFlyingCountDown <= 0 
-				&& GAME.player.IsTilePassable( GAME.Tiles.GetAtXY( GAME.player.mGameX, GAME.player.mGameY ) ) === true ) { 
+			if ( GAME.mSpellFlyingCountDown <= 0
+				&& GAME.player.IsTilePassable( GAME.Tiles.GetAtXY( GAME.player.mGameX, GAME.player.mGameY ) ) === true ) {
 				var obj = GAME.Objects.GetTerrainAtXY( GAME.player.mGameX, GAME.player.mGameY );
 				if ( obj === undefined || GAME.player.IsObjectPassable( obj.t ) === true ) {
 					GAME.mSpellFlyingCountDown = 0;
@@ -390,14 +373,14 @@ GAME.RunInit = function() {
 				GAME.Notifications.Post('You are no more hiding in shadows', 'bad');
 			}
 		}
-		if ( GAME.mSpecialCountDown !== 0 ) { 
-			GAME.mSpecialCountDown -= 1; 
-			if ( GAME.mSpecialCountDown === 0 ) { 
-				GAME.Buttons.SpecialEnable(); 
+		if ( GAME.mSpecialCountDown !== 0 ) {
+			GAME.mSpecialCountDown -= 1;
+			if ( GAME.mSpecialCountDown === 0 ) {
+				GAME.Buttons.SpecialEnable();
 				GAME.Notifications.Post('Special Ability Recovered', 'good');
 			}
 		}
-		if ( GAME.mTimeStop !== 0 ) { 
+		if ( GAME.mTimeStop !== 0 ) {
 			GAME.mTimeStop -= 1;
 			if ( GAME.mTimeStop === 0 ) {
 				GAME.Notifications.Post('Time flow is back to normal');
@@ -405,7 +388,7 @@ GAME.RunInit = function() {
 				GAME.Display.RenderObjects();
 			}
 		}
-		if ( GAME.mTimeStop === 0 ) {			
+		if ( GAME.mTimeStop === 0 ) {
 			$('.turn_indicators').hide(0);
 			$('#turn_indicator_enemies').show(0);
 
@@ -426,12 +409,12 @@ GAME.RunInit = function() {
 
 			//console.log('queued monster moves');
 			GAME.mMQ.queue('monster_move_queue', function( next_monster_move ) {
-				//console.log('TURN_ENEMY_END');	
+				//console.log('TURN_ENEMY_END');
 				next_monster_move();
 				amplify.publish('TURN_ENEMY_END');
 			});
 			//console.log('queued end of monster turn');
-		
+
 			GAME.mMQ.dequeue('monster_move_queue');
 		} else {
 			amplify.publish('TURN_ENEMY_END');
@@ -612,7 +595,7 @@ GAME.EntityAttacksEntityRNG = function( attacker, defender, next_monster_move ) 
 GAME.ProcessMonsterAction = function( monster, next_monster_move ) {
 
 	if ( monster.mRegeneration !== undefined && monster.mHP[0] < monster.mHP[1] ) {
-		// normal regeneration 
+		// normal regeneration
 		var hp = ( monster.mHP[1] - monster.mHP[0] < monster.mRegeneration ) ? ( monster.mHP[1] - monster.mHP[0] ) : monster.mRegeneration;
 		monster.mHP[0] += hp
 		if ( monster.IsOffScreen() === false ) {
@@ -669,9 +652,9 @@ GAME.ProcessMonsterAction = function( monster, next_monster_move ) {
 					if ( monster.IsAdjacentEntity( defender ) === true && monster.HasHTHAttack() === true ) {
 						//console.log('frenzied: attacking hth');
 						this.EntityAttacksEntityHTH( monster, defender, next_monster_move );
-					} else if ( monster.HasRangedAttack() === true 
+					} else if ( monster.HasRangedAttack() === true
 						&& monster.CheckLosToEntity( defender ) === true
-						&& monster.mRngRange >= monster.DistanceTo( defender ) 
+						&& monster.mRngRange >= monster.DistanceTo( defender )
 						) {
 						//console.log('frenzied: attacking rng');
 						this.EntityAttacksEntityRNG( monster, defender, next_monster_move );
@@ -692,7 +675,7 @@ GAME.ProcessMonsterAction = function( monster, next_monster_move ) {
 				if ( monster.IsAdjacentEntity( defender ) === true && monster.HasHTHAttack() === true ) {
 					//console.log('friendly '+monster.mName+' hth attack performed');
 					this.EntityAttacksEntityHTH( monster, defender, next_monster_move );
-				} else if ( monster.HasRangedAttack() === true 
+				} else if ( monster.HasRangedAttack() === true
 					&& monster.CheckLosToEntity( defender ) === true
 					&& monster.mRngRange >= monster.DistanceTo( defender )
 					) {
@@ -748,7 +731,7 @@ GAME.ProcessMonsterAction = function( monster, next_monster_move ) {
 				if ( monster.IsAdjacentEntity( defender ) === true && monster.HasHTHAttack() === true ) {
 					//console.log('aggressive '+monster.mName+' hth attack performed');
 					this.EntityAttacksEntityHTH( monster, defender, next_monster_move );
-				} else if ( monster.HasRangedAttack() === true 
+				} else if ( monster.HasRangedAttack() === true
 					&& monster.CheckLosToEntity( defender ) === true
 					&& monster.mRngRange >= monster.DistanceTo( defender )
 					) {
@@ -766,11 +749,11 @@ GAME.ProcessMonsterAction = function( monster, next_monster_move ) {
 					}
 					next_monster_move();
 				}
-			} else if ( monster.mState === 'angered' ) {					
+			} else if ( monster.mState === 'angered' ) {
 				if ( monster.IsAdjacentEntity( GAME.player ) === true && monster.HasHTHAttack() === true ) {
 					//console.log('angered '+monster.mName+' hth attack performed');
 					this.EntityAttacksEntityHTH( monster, GAME.player, next_monster_move );
-				} else if ( monster.HasRangedAttack() === true 
+				} else if ( monster.HasRangedAttack() === true
 					&& monster.CheckLosToEntity( GAME.player ) === true
 					&& monster.mRngRange >= dist
 					) {
@@ -857,7 +840,7 @@ GAME.ResurrectHero = function() {
 	if ( gp.mNHTH > 0 ) { gp.mHTH *= 0.9; gp.mHTH = Math.ceil( gp.mHTH ); }
 	if ( gp.mNRNG > 0 ) { gp.mRNG *= 0.9; gp.mRNG = Math.ceil( gp.mRNG ); }
 
-	// decrease hit points	
+	// decrease hit points
 	if ( gp.mHP[1] > 10 ) { gp.mHP[1] -= 5; gp.mHP[0] = gp.mHP[1]; }
 
     // decrease defense
@@ -871,13 +854,13 @@ GAME.ResurrectHero = function() {
     GAME.Display.RenderWorldmap();
     GAME.Display.RenderMinimap();
     GAME.Display.RenderHeroPortrait();
-        
+
     this.layer_control.ShowLayer('land', 1000);
     this.layer_control.ShowLayer('monsters', 1000);
     this.layer_control.ShowLayer('mouse', 1000);
     this.layer_control.ShowLayer('minimap', 1000);
     this.layer_control.ShowLayer('hero_portrait', 1000);
-            
+
     GAME.Display.UpdateDayNightLayer();
     this.Display.ShowPlayerOverlay();
     GAME.Buttons.Show();
@@ -913,8 +896,10 @@ GAME.Update = function(dt) {
 		}
 
 		if ( key.isPressed('q') ) {
-			GAME.GameOver( false );
+			this.mLastKeyPress = 0;
 			key_pressed = 'ignore';
+			// FIXME how to ask a confirmation? confirm('Sure wanna quit?') &&
+			GAME.GameOver( false );
 		}
 
 		if ( key.isPressed('pageup') ) {
@@ -936,7 +921,6 @@ GAME.Update = function(dt) {
 		};
 
 		if ( key_pressed === false && key.isPressed('left') ) {
-			var c = GAME.player.GetGameXY();
 			GAME.player.SetFlipX(true);
 			if ( GAME.player.MoveToDXY( -1, 0 ) === true ) {
 				GAME.player.SetCurrentAnimation('move');
@@ -1009,8 +993,8 @@ GAME.Render = function() {
 	if ( GAME.text_animations.length > 0 ) {
 		for( var i = 0, len = GAME.text_animations.length; i < len; i++ ) {
 			GAME.text_animations[i].Render();
-		}	
-	}	
+		}
+	}
 };
 
 GAME.StartLoop = function() {
@@ -1022,12 +1006,12 @@ GAME.StartLoop = function() {
     this.mLoopLastTimeUpdated = now;
 
 	this.mLastTick += dt;
-	if ( this.mLoopThrottle === true && this.mLastTick < 50 ) { 
-		return; 
-	} else { 
+	if ( this.mLoopThrottle === true && this.mLastTick < 50 ) {
+		return;
+	} else {
 		this.Update(this.mLastTick);
 		this.Render();
-		this.mLastTick = 0; 
+		this.mLastTick = 0;
 		return;
 	}
 
@@ -1042,7 +1026,7 @@ GAME.StopLoop = function() {
 
 GAME.UpdateMonsters = function( dt ) {
 	var c = GAME.player.GetGameXY();
-    var monsters = GAME.Monsters.Find( c.x - GAME.Display.mTileSize.hw - 1, c.y - GAME.Display.mTileSize.hh - 1, 
+    var monsters = GAME.Monsters.Find( c.x - GAME.Display.mTileSize.hw - 1, c.y - GAME.Display.mTileSize.hh - 1,
 		c.x + GAME.Display.mTileSize.hw + 1, c.y + GAME.Display.mTileSize.hh + 1 );
     for ( var i = 0, len = monsters.length; i < len; i++ ) {
 		//if ( c.x < monsters[i].mGameX ) { monsters[i].SetFlipX(true); } else { monsters[i].SetFlipX(false); }
@@ -1096,7 +1080,7 @@ GAME.SpellTornado = function() {
 		for (var y = -2; y <= 2; y++) {
 			if ( ( x === -2 && y === -2 ) || ( x === -2 && y === 2 ) || ( x === 2 && y === -2 ) || ( x === 2 && y === 2 ) ) { continue; }
 			tile = GAME.Tiles.GetAtXY(c.x + x, c.y + y);
-			if ( tile === 'sand' || tile.startsWith('water') || tile.startsWith('swamp') ) { continue; } 
+			if ( tile === 'sand' || tile.startsWith('water') || tile.startsWith('swamp') ) { continue; }
 			GAME.Tiles.SetAtXY( 'mud', c.x + x, c.y + y );
 			obj = GAME.Objects.GetTerrainAtXY( c.x + x, c.y + y );
 			if ( obj !== undefined && ( obj.t.startsWith('house') || obj.t === 'mine'|| obj.t === 'monolith' ) ) { continue; }
@@ -1107,7 +1091,7 @@ GAME.SpellTornado = function() {
 	for (var x = -1; x <= 1; x++ ) {
 		for (var y = -1; y <= 1; y++) {
 			tile = GAME.Tiles.GetAtXY(c.x + x, c.y + y);
-			if ( tile === 'sand' || tile.startsWith('water') || tile.startsWith('swamp') ) { continue; } 
+			if ( tile === 'sand' || tile.startsWith('water') || tile.startsWith('swamp') ) { continue; }
 			GAME.Tiles.SetAtXY( 'dirt', c.x + x, c.y + y );
 		}
 	}
@@ -1150,14 +1134,14 @@ GAME.SpellMirror = function() {
 	pos_2 = GAME.MapGen.SearchRadius( c.x, c.y, GAME.player.mPassableTiles );
 	GAME.Monsters.CreatePlayerCopy( pos_2.x, pos_2.y );
 
-	GAME.player.AddEffect( $.extend( {}, GAME.effects['magichalo'] ) );	
+	GAME.player.AddEffect( $.extend( {}, GAME.effects['magichalo'] ) );
 	GAME.Notifications.Post('You have successfully created mirror images of yourself', 'good');
 };
 GAME.SpellShadows = function() {
 	GAME.player.mIsHidden = true;
-	GAME.player.AddEffect( $.extend( {}, GAME.effects['magichalo'] ) );	
+	GAME.player.AddEffect( $.extend( {}, GAME.effects['magichalo'] ) );
 	GAME.mSpellShadowsCountDown = 15;
-	GAME.Notifications.Post('Hiding in shadows', 'good');	
+	GAME.Notifications.Post('Hiding in shadows', 'good');
 };
 
 //------------ TILE SPELLS -------------------
@@ -1177,7 +1161,7 @@ GAME.SpellRain = function( c, pc ) {
 		for (var y = -2; y <= 2; y++) {
 			if ( ( x === -2 && y === -2 ) || ( x === -2 && y === 2 ) || ( x === 2 && y === -2 ) || ( x === 2 && y === 2 ) ) { continue; }
 			tile = GAME.Tiles.GetAtXY(pc.x + c.x + x, pc.y + c.y + y);
-			if ( tile.startsWith('water') || tile.startsWith('swamp') ) { continue; } 
+			if ( tile.startsWith('water') || tile.startsWith('swamp') ) { continue; }
 			obj = GAME.Objects.GetTerrainAtXY( pc.x + c.x + x, pc.y + c.y + y );
 			if ( obj !== undefined && ( obj.t.startsWith('house') || obj.t === 'mine'|| obj.t === 'monolith' ) ) { continue; }
 			if ( GAME.Monsters.IsMonsterThere( pc.x + c.x + x, pc.y + c.y + y ) !== false ) { continue; } // monster
@@ -1201,7 +1185,7 @@ GAME.SpellRain = function( c, pc ) {
 	if ( ! ( c.x === 0 && c.y === 0 ) ) {
 		GAME.Tiles.SetAtXY( 'water_deep', pc.x + c.x, pc.y + c.y);
 	}
-	
+
 	GAME.Notifications.Post('Nature has heard your call..Tropical Storm is here.', 'good');
 	GAME.Display.RenderLand();
 	GAME.Display.RenderObjects();
@@ -1221,7 +1205,7 @@ GAME.SpellForest = function( c, pc ) {
 		for (var y = -2; y <= 2; y++) {
 			if ( ( x === -2 && y === -2 ) || ( x === -2 && y === 2 ) || ( x === 2 && y === -2 ) || ( x === 2 && y === 2 ) ) { continue; }
 			tile = GAME.Tiles.GetAtXY(pc.x + c.x + x, pc.y + c.y + y);
-			if ( tile.startsWith('water') || tile.startsWith('swamp') ) { continue; } 
+			if ( tile.startsWith('water') || tile.startsWith('swamp') ) { continue; }
 
 			obj = GAME.Objects.GetTerrainAtXY( pc.x + c.x + x, pc.y + c.y + y );
 			if ( obj !== undefined && ( obj.t.startsWith('house') || obj.t === 'mine'|| obj.t === 'monolith' ) ) { continue; }
@@ -1233,16 +1217,16 @@ GAME.SpellForest = function( c, pc ) {
 				GAME.Tiles.SetAtXY( 'grass', pc.x + c.x + x, pc.y + c.y + y );
 				GAME.Objects.Destroy( pc.x + c.x + x, pc.y + c.y + y );
 				GAME.Objects.DestroyTerrain( pc.x + c.x + x, pc.y + c.y + y );
-				if ( $.gmRndInt(0,99) < 50 ) { 
-					forest_name = 'forest_deducious'; 
-				} else { 
-					forest_name = 'forest_coniferous'; 
+				if ( $.gmRndInt(0,99) < 50 ) {
+					forest_name = 'forest_deducious';
+				} else {
+					forest_name = 'forest_coniferous';
 				}
 				GAME.Objects.CreateAt( forest_name, pc.x + c.x + x, pc.y + c.y + y );
 			}
 		}
 	}
-	
+
 	GAME.Notifications.Post('Nature has heard your call..Forests has grown.', 'good');
 	GAME.Display.RenderLand();
 	GAME.Display.RenderObjects();
@@ -1262,20 +1246,20 @@ GAME.SpellMeteor = function( c, pc ) {
 			if ( ( x === -2 && y === -2 ) || ( x === -2 && y === 2 ) || ( x === 2 && y === -2 ) || ( x === 2 && y === 2 ) ) { continue; }
 
 			tile = GAME.Tiles.GetAtXY(pc.x + c.x + x, pc.y + c.y + y);
-			if ( tile.startsWith('water') || tile.startsWith('swamp') ) { continue; } 
+			if ( tile.startsWith('water') || tile.startsWith('swamp') ) { continue; }
 
 			obj = GAME.Objects.GetTerrainAtXY( pc.x + c.x + x, pc.y + c.y + y );
 			if ( obj !== undefined && ( obj.t.startsWith('house') || obj.t === 'mine'|| obj.t === 'monolith' ) ) { continue; }
 
 			var monster = GAME.Monsters.IsMonsterThere( pc.x + c.x + x, pc.y + c.y + y );
 			if ( monster !== false ) {
-				var dmg = monster.mHP[0] * $.gmRnd(0.75, 0.95); 
+				var dmg = monster.mHP[0] * $.gmRnd(0.75, 0.95);
 				monster.mHP[0] -= dmg;
 				GAME.AddTextAnimation('-'+parseInt(dmg)+' HP', monster.mGameX, monster.mGameY, '#E00');
 				GAME.Tiles.SetAtXY( 'sand', pc.x + c.x + x, pc.y + c.y + y );
 				GAME.Objects.Destroy( pc.x + c.x + x, pc.y + c.y + y );
 				GAME.Objects.DestroyTerrain( pc.x + c.x + x, pc.y + c.y + y );
-				continue; 
+				continue;
 			}
 
 			if ( x === 0 && y === 0 && c.x === 0 && c.y === 0 ) { continue; } // player
@@ -1287,7 +1271,7 @@ GAME.SpellMeteor = function( c, pc ) {
 			}
 		}
 	}
-	
+
 	GAME.Notifications.Post('Nature has heard your call.. Meteors have fallen from the sky', 'good');
 	GAME.Display.RenderLand();
 	GAME.Display.RenderObjects();
@@ -1352,10 +1336,10 @@ GAME.SpellHeal = function( c, pc ) {
 			GAME.Notifications.Post(monster.mName+' is fully healed', 'good');
 			monster.AddEffect( $.extend( {}, GAME.effects['healing'] ) );
 		} else {
-			var dmg = monster.mHP[0] * $.gmRnd(0.25, 0.75); 
+			var dmg = monster.mHP[0] * $.gmRnd(0.25, 0.75);
 			monster.mHP[0] -= dmg;
 			GAME.Notifications.Post(monster.mName+' suffered from Heal spell', 'good');
-			GAME.AddTextAnimation('-'+parseInt(dmg)+' HP', monster.mGameX, monster.mGameY, '#E00');		
+			GAME.AddTextAnimation('-'+parseInt(dmg)+' HP', monster.mGameX, monster.mGameY, '#E00');
 		}
 	}
 };
