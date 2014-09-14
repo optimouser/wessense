@@ -1,9 +1,9 @@
 
-GAME.Dialogs = GAME.Dialogs || { 
+GAME.Dialogs = GAME.Dialogs || {
 	mCurrentScreen: 0,
 	mQuestScreens: [ 'Intro', 'Rescue', 'Optional', 'Elven', 'Dwarven', 'Human', 'Special', 'Teleport', 'Departure' ],
 	mCurrentHelpPage: 0,
-	mHelpTexts: [ 
+	mHelpTexts: [
 		"<b>Controls.</b><p>Click tile to move or attack. Press 'backspace' or tap green \"Current Turn\" indicator to skip turns. Press \"PgUp\" / \"PgDn\" or use OPTIONS menu to change tile scale.</p><b>Strategy.</b><p>Tiles provide defense bonus to your hero, displayed in the bottom-left corner of the tile (mouseover). Make sure that your position is providing best defense rating when you engage into combat.</p><p>Be wise with ranged attacks - make sure that enemy has to walk at least two tiles before reaching your mage. Use 'Time' ability to escape unwanted melee combat. Melee units may want to use 'Time' ability to get closer to enemy units equipped with ranged weapons.</p><b>Monsters</b><p>There are neutral, aggressive and friendly monsters, marked by gray, pink and green markers accordingly. Neutral monsters will ignore your character unless it comes close to them - this will make them aggressive. Friendly monsters/units will follow player, but will not attack. Aggressive monsters will do their best to kill player. Life is tough on this island. Monsters may possess various abilities, like ranged attacks or regeneration - be warned. When monster is killed, there is a chance that it will drop some useful item, like healing potion or magical weapon.</p>",
 		"<b>Quests</b><p>'Easy' game difficulty level allows to see ALL quest locations on the World Map, including secondary quests. 'Normal' level Worldmap displays just primary quest locations. 'Hard' level is hard, it provides no help with quest locations, so you have to discover them completely on your own.</p><p>Completion of the main quest ends game, so make sure you have done all secondary, optional and special quests before you finish main quest.</p>",
 		"<b>Damage Modifiers</b><p>There are many damage modifiers in the game. For example, if Character has \"Hates XXX\" trait, than it will deal x1.5 damage to the enemies of type XXX.</p><p>Also, day/night cycle matters for Undead and Orcs. Undead will do up to x2 of their regular damage at night and x1.33 more at evenings. They have reduced damage during day x0.85, and mornings x0.95.</p><p>Orcs do x1.1 damage during twilight hours in the morning/eventing, and x0.95 during the day.</p><p>Human Thief characters do x1.2 damage during night, and x1.1 during mornings and evenings.</p><p>There are spells which affect damage too. For example, Entangle will reduce the damage inflicted by the entangled unit by 50 percent (applied after all other modifiers!).</p>",
@@ -46,7 +46,7 @@ GAME.Dialogs.DisplayShopMagic = function() {
 	} else if ( GAME.Dialogs.mShopMode === 'sell' ) {
 		$('.button_shop_magic_buy' ).hide(0);
 		$('.button_shop_magic_sell').show(0);
-	}	
+	}
 
 	var sp = GAME.Buttons.mSpells;
 	for ( var i in sp ) {
@@ -55,9 +55,9 @@ GAME.Dialogs.DisplayShopMagic = function() {
 		var item = $('<div style="width: 200px; display: inline-block; border-top: 1px dashed silver;" data-name="'+i+'"></div>');
 		item.append( $('<div class="'+sp[i][1]+' gm_spells" data-spell="'+i+'">'+sp[i][0]+'<br>'+GAME.player.mMagic[i]+'</div>') );
 		item.append( $('<div class="gm_val" style="color: gold; font-size: 20px; float: right;">'+ ( ( GAME.Dialogs.mShopMode === 'sell' ) ? ( sp[i][4] - 1 ) : ( sp[i][4] ) ) +' gold</div>') );
-		if ( ( GAME.Dialogs.mShopMode === 'buy' && GAME.player.mCash < sp[i][4] ) 
-			|| ( GAME.Dialogs.mShopMode === 'sell' && GAME.player.mMagic[i] <= 0 ) ) { 
-			item.addClass('desaturate'); 
+		if ( ( GAME.Dialogs.mShopMode === 'buy' && GAME.player.mCash < sp[i][4] )
+			|| ( GAME.Dialogs.mShopMode === 'sell' && GAME.player.mMagic[i] <= 0 ) ) {
+			item.addClass('desaturate');
 			item.hover(
 				function() {
 					$(this).css({'background-color': '#700'});
@@ -105,7 +105,7 @@ GAME.Dialogs.DisplayShopMagic = function() {
                 $( this ).dialog( "close" );
 			}
 		}
-	});	
+	});
 
 };
 
@@ -128,12 +128,12 @@ GAME.Dialogs.DisplayShopWeapons = function() {
 				GAME.Dialogs.DisplayShopWeapons();
 			});
 		}
-		item.hover( 
+		item.hover(
 			function() {
 				if ( GAME.player.mCash >= price ) {
 					$(this).css({'background-color': '#070'});
 					$(this).click(function() {
-						GAME.Notifications.Post('You have bought an extra training', 'good');						
+						GAME.Notifications.Post('You have bought an extra training', 'good');
 					});
 				} else {
 					$(this).css({'background-color': '#700'});
@@ -141,11 +141,11 @@ GAME.Dialogs.DisplayShopWeapons = function() {
 						GAME.Notifications.Post('Not enough gold to buy this training', 'bad');
 					});
 				}
-			}, 
+			},
 			function() {
-				$(this).css({'background-color': ''});				
+				$(this).css({'background-color': ''});
 			}
-		);		
+		);
 	};
 
 	if ( $('#shopweaponsdialog').length > 0 ) {
@@ -215,7 +215,7 @@ GAME.Dialogs.DisplayShopWeapons = function() {
                 $( this ).dialog( "close" );
 			}
 		}
-	});		
+	});
 };
 
 GAME.Dialogs.DisplayHelpDialog = function() {
@@ -419,7 +419,7 @@ GAME.Dialogs.DisplayGameScoreDialog = function() {
 
 	// special quest
 	if (   ( GAME.data['role'].startsWith('role_1') === true && gps['potion_of_youth_found'] === true )
-		|| ( GAME.data['role'].startsWith('role_2') === true && gps['unicorn_released'] === true ) 
+		|| ( GAME.data['role'].startsWith('role_2') === true && gps['unicorn_released'] === true )
 		|| ( GAME.data['role'].startsWith('role_3') === true && gps['mines_cleared'][0] === gps['mines_cleared'][1] )
 		|| ( GAME.data['role'].startsWith('role_4') === true && gps['fugitive_killed'] === true ) ) {
 			$('#gs_specquest').css({'color': '#0F0'}).text('YES');
@@ -442,9 +442,9 @@ GAME.Dialogs.DisplayGameScoreDialog = function() {
 	var turns_pts = ( 5000 - GAME.mTime.mTurns );
 	$('#gs_turns').text( GAME.mTime.mTurns );
 	$('#gs_turns_pts').text( ' = ' + turns_pts + ' pts');
-	total_points += turns_pts;	
+	total_points += turns_pts;
 
-	// spells 
+	// spells
 	$('#gs_spells').text( gps['spells_cast'] );
 	var spells_pts = gps['spells_cast'] * 10;
 	$('#gs_spells_pts').text( ' = ' + spells_pts + ' pts');
@@ -464,7 +464,7 @@ GAME.Dialogs.DisplayGameScoreDialog = function() {
         buttons: {
             'Start New Game': function() {
                 $( this ).dialog( "close" );
-				location.reload(); 
+				location.reload();
             }
 		}
 	});
@@ -491,7 +491,7 @@ GAME.Dialogs.DisplayGameOverGoodDialog = function() {
 			},
             'Start New Game': function() {
                 $( this ).dialog( "close" );
-				location.reload(); 
+				location.reload();
             }
 		}
 	});
@@ -514,7 +514,7 @@ GAME.Dialogs.DisplayGameOverBadDialog = function() {
         buttons: {
             'Restart Game': function() {
                 $( this ).dialog( "close" );
-				location.reload(); 
+				location.reload();
             },
             'Resurrect Hero': function() {
                 $( this ).dialog( "close" );
@@ -644,7 +644,7 @@ GAME.Dialogs.DisplayMainQuestDialog = function() {
 			},
 			'Next' : function() {
 				GAME.Dialogs.mCurrentScreen += 1;
-				if ( GAME.Dialogs.mCurrentScreen < GAME.Dialogs.mQuestScreens.length ) { 
+				if ( GAME.Dialogs.mCurrentScreen < GAME.Dialogs.mQuestScreens.length ) {
 					eval( 'GAME.Dialogs.QuestScreen' + GAME.Dialogs.mQuestScreens[GAME.Dialogs.mCurrentScreen]+'()' );
 				} else {
 	                $( this ).dialog( "close" );
@@ -683,7 +683,7 @@ GAME.Dialogs.DisplayQuestsDialog = function() {
 		text += '</table>';
 		text += '</div>';
 	$('body').append(text);
-	
+
 	var p = GAME.player.mStats;
 	if ( p.necklace_found === true ) { $('#img_necklace').css({ 'background-color': '#0F0' }); } else { $('#img_necklace').css({ 'background-color': '#F00' }); }
 	if ( p.flamingsword_found === true ) { $('#img_flaming_sword').css({ 'background-color': '#0F0' }); } else { $('#img_flaming_sword').css({ 'background-color': '#F00' }); }
@@ -694,7 +694,7 @@ GAME.Dialogs.DisplayQuestsDialog = function() {
 	if ( p.unicorn_released === true ) { $('#img_caged_unicorn').css({ 'background-color': '#0F0' }); } else { $('#img_caged_unicorn').css({ 'background-color': '#F00' }); }
 	if ( p.orc_boss_killed === true ) { $('#img_orc_flag').css({ 'background-color': '#0F0' }); } else { $('#img_orc_flag').css({ 'background-color': '#F00' }); }
 	if ( p.evil_boss_killed === true ) { $('#img_evil_flag').css({ 'background-color': '#0F0' }); } else { $('#img_evil_flag').css({ 'background-color': '#F00' }); }
-	if ( p.mines_cleared[0] === p.mines_cleared[1] ) { $('#img_mine').css({ 'background-color': '#0F0' }); } else { $('#img_mine').css({ 'background-color': '#F00' }); }	
+	if ( p.mines_cleared[0] === p.mines_cleared[1] ) { $('#img_mine').css({ 'background-color': '#0F0' }); } else { $('#img_mine').css({ 'background-color': '#F00' }); }
 	if ( p.fugitive_killed === true ) { $('#img_fugitive').css({ 'background-color': '#0F0' }); } else { $('#img_fugitive').css({ 'background-color': '#F00' }); }
 
     $("#questsdialog").dialog({
@@ -923,19 +923,18 @@ GAME.Dialogs.DisplayHeroSelectionDialog = function() {
 	$('#herodialog img').click(function() {
 		var that = this;
 		$('#herodialog img').each( function() {
-			if ( that != this ) {
-				$(this).addClass('desaturate');
-			}
-			$(this).unbind('click').unbind('mouseenter').unbind('mouseleave');			
+			$(this).toggleClass('desaturate', that != this);
+			$(this).unbind('mouseenter').unbind('mouseleave');
 		});
 		GAME.data['role'] = $(this).data('role');
-		$('#herodialog img').css({ 
+    $('#hero_desc').html(desc[ $(this).data('role') ]);
+		$('#herodialog img').css({
 			'background': 'radial-gradient(ellipse at center, #f8ffe8 0%,#e3f5ab 33%,#b7df2d 100%)',
 			'border': '3px solid #555'
 		});
-		$(this).css({ 
+		$(this).css({
 			'background': 'radial-gradient(ellipse at center, #fefcea 0%,#f7bf09 100%)',
-			'border': '3px solid #FFF' 
+			'border': '3px solid #FFF'
 		});
 		$('#next_button').show(0);
 	});
@@ -959,4 +958,3 @@ GAME.Dialogs.DisplayHeroSelectionDialog = function() {
         }
     });
 };
-

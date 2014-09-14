@@ -3,7 +3,7 @@
 	<head>
 		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
 
-		<title>W.Essense, v0.86a</title>
+		<title>W.Essense, v0.86a+</title>
 
 		<link rel="stylesheet" type="text/css" href='css/mint-choc/jquery-ui-1.10.4.custom.css' >
 		<link rel="stylesheet" type="text/css" href='css/intro.css' >
@@ -48,14 +48,14 @@
 		<script type="text/javascript" src='js/GAME.Buttons.js'></script>
 
 		<script>
-			$(document).ready( function() {
+			$(function() {
 				GAME.Init();
 
 				amplify.subscribe('IMAGES_PRELOADED', function() {
 					GAME.progress_control.ClearAll();
 					GAME.Dialogs.DisplayIntroDialog();
 				});
-	
+
 				amplify.subscribe('MAP_GENERATION_COMPLETE', function() {
 					GAME.progress_control.ClearAll();
 					GAME.Run();
