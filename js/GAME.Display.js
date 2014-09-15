@@ -1,5 +1,5 @@
 
-GAME.Display = GAME.Display || { 
+GAME.Display = GAME.Display || {
     mDX: 72,
     mDY: 72,
 
@@ -38,9 +38,9 @@ GAME.Display.DrawTileDef = function( def, color ) {
     ctx.translate( posx, posy );
     ctx.font = parseInt( Math.floor( 17 * scale ) ) + "px monospace";
     ctx.fillStyle = "#333";
-    ctx.fillText( def, 1, 1 );	
+    ctx.fillText( def, 1, 1 );
     ctx.fillStyle = color;
-    ctx.fillText( def, 0, 0 );	
+    ctx.fillText( def, 0, 0 );
 	ctx.restore();
 };
 
@@ -48,7 +48,7 @@ GAME.Display.UpdateDayNightLayer = function() {
 	var dncanvas = GAME.layer_control.GetCanvas( 'daynight' );
 	var dnctx = GAME.layer_control.GetContext( 'daynight' );
 
-	var radGrad = dnctx.createRadialGradient( dncanvas.width / 2, dncanvas.height / 2, this.mOutDX / 4, 
+	var radGrad = dnctx.createRadialGradient( dncanvas.width / 2, dncanvas.height / 2, this.mOutDX / 4,
 		    dncanvas.width / 2, dncanvas.height / 2, this.mOutDX * 4 );
 
 	radGrad.addColorStop( 0, "transparent" );
@@ -92,7 +92,7 @@ GAME.Display.ZoomOut = function() {
 	this.mOutDX = 72 * this.mScaleFactor;
 	this.mOutDY = 72 * this.mScaleFactor;
 	this.UpdateScreenResolution();
-	
+
 	// update player params
 	if ( GAME.player != undefined ) {
 		var gd = GAME.Display;
@@ -119,18 +119,18 @@ GAME.Display.Init = function() {
 	GAME.layer_control.CreateLayer( 'daynight', 5 );
 	GAME.layer_control.CreateLayer( 'mouse',    6 );
 
-    var css_opts = { 
- 		'position': 'fixed', 
-		'border-radius': GAME.Display.mDX*1.5, 
+    var css_opts = {
+ 		'position': 'fixed',
+		'border-radius': GAME.Display.mDX*1.5,
 		'width': GAME.Display.mDX * 3, 'height': GAME.Display.mDY * 3,
         'border': '2px solid #CCC', 'top': '10px', 'left': '10px', 'margin-top': 0, 'margin-left': 0,
 		'box-shadow': '4px 4px 2px #333', 'cursor': 'pointer'
     };
     GAME.layer_control.CreateLayer('minimap', 7, css_opts);
 
-    css_opts = { 
-		'position': 'fixed', 
-		'border-radius': GAME.MapGen.mDX / 2.0, 
+    css_opts = {
+		'position': 'fixed',
+		'border-radius': GAME.MapGen.mDX / 2.0,
 		'width': GAME.MapGen.mDX, 'height': GAME.MapGen.mDY,
         'border': '2px solid #FFF', 'box-shadow': '4px 4px 2px #333', 'cursor': 'pointer'
 
@@ -139,8 +139,8 @@ GAME.Display.Init = function() {
     GAME.layer_control.CreateLayer('worldmap_marks', 8, css_opts);
 
 	css_opts = {
-		'position': 'fixed', 
-		'border-radius': GAME.Display.mDX * 1.5, 
+		'position': 'fixed',
+		'border-radius': GAME.Display.mDX * 1.5,
 		'width': GAME.Display.mDX * 3, 'height': GAME.Display.mDY * 3,
 		'border': '2px solid #CCC', 'top': '10px', 'right': '10px', 'margin-top': 0, 'margin-right': 0,
 		'background': 'radial-gradient(ellipse at center, #fefcea 0%,#f7bf09 100%)',
@@ -177,9 +177,9 @@ GAME.Display.Init = function() {
 };
 
 GAME.Display.CreatePlayerOverlay = function() {
-    if ( $('#player_overlay').length > 0 ) { 
+    if ( $('#player_overlay').length > 0 ) {
 		$('#player_overlay').remove();
-		return; 
+		return;
 	}
     var contents = '<div id="player_overlay" class="disableSelection">';
         contents += '<div class="img_lvl img_stat">Level</div> <div class="val_lvl gm_val">0</div>';
@@ -296,7 +296,7 @@ GAME.Display.RenderWorldmapMarks = function() {
         img.width,
         img.height );
 
-	if ( GAME.data['game_difficulty'] < 2.0 ) {    
+	if ( GAME.data['game_difficulty'] < 2.0 ) {
 		// key mark:
 		if ( GAME.player.mStats.tower_key_found === false ) {
 			ctx.drawImage( mark_img, 9*72, 23*72, 72, 72,
@@ -383,17 +383,17 @@ GAME.Display.RenderMinimap = function() {
 	ctx.save();
 	ctx.translate(108, 216);
 	ctx.rotate( GAME.mTime.GetRotation() );
-	ctx.drawImage( daynight, 
-		0, 
-		0, 
-		60, 
-		60, 
-		-30, 
-		-30, 
-		60, 
+	ctx.drawImage( daynight,
+		0,
+		0,
+		60,
+		60,
+		-30,
+		-30,
+		60,
 		60 );
 	ctx.restore();
-	
+
 };
 
 GAME.Display.RenderMonsters = function() {
@@ -425,7 +425,7 @@ GAME.Display.RenderMonsters = function() {
 		m = monsters[i]; mc = m.GetGameXY();
 		tile = GAME.MapGen.GetTile( mc.x, mc.y );
 		if ( GAME.overlays[ tile ] != undefined ) { m.SetOverlay( GAME.overlays[ tile ] ); } else { m.RemoveOverlay(); }
-		m.SetXY( ( mc.x - c.x + hw ) * this.mOutDX + this.mOutDX / 2, 
+		m.SetXY( ( mc.x - c.x + hw ) * this.mOutDX + this.mOutDX / 2,
 			( mc.y - c.y + hh ) * this.mOutDY + this.mOutDY / 2 );
 		m.Render();
 		m.RenderInfo();
@@ -444,11 +444,11 @@ GAME.Display.RenderObjects = function() {
 			if ( tmap[posx][posy] !== undefined ) {
 				this.RenderTerrainObject( posx, posy, i, j );
 			}
-			if ( bmap[posx][posy] !== undefined ) { 
-				this.RenderBlood( posx, posy, i, j ); 
+			if ( bmap[posx][posy] !== undefined ) {
+				this.RenderBlood( posx, posy, i, j );
 			}
-			if ( omap[posx][posy] !== undefined ) { 
-				this.RenderObject( posx, posy, i, j ); 
+			if ( omap[posx][posy] !== undefined ) {
+				this.RenderObject( posx, posy, i, j );
 			}
 		}
 	}
@@ -475,7 +475,7 @@ GAME.Display.RenderTerrainObject = function( x, y, dst_x, dst_y ) {
         dst_x * this.mOutDX, // x to
         dst_y * this.mOutDY,  // y to
         this.mOutDX,
-        this.mOutDY 
+        this.mOutDY
 	);
 };
 
@@ -499,10 +499,10 @@ GAME.Display.RenderObject = function( x, y, dst_x, dst_y ) {
 		        dst_x * this.mOutDX, // x to
 		        dst_y * this.mOutDY,  // y to
 		        this.mOutDX,
-		        this.mOutDY 
+		        this.mOutDY
 			);
 		}
-	} else { 
+	} else {
 	    var obj = GAME.Objects.Get(o.t);
 		var off_x = obj.xoff + o.v;
 		var off_y = obj.yoff;
@@ -517,7 +517,7 @@ GAME.Display.RenderObject = function( x, y, dst_x, dst_y ) {
 	        dst_x * this.mOutDX, // x to
 	        dst_y * this.mOutDY,  // y to
 	        this.mOutDX,
-	        this.mOutDY 
+	        this.mOutDY
 		);
 	}
 };
@@ -538,7 +538,7 @@ GAME.Display.RenderBlood = function( x, y, dst_x, dst_y ) {
         dst_x * this.mOutDX, // x to
         dst_y * this.mOutDY,  // y to
         this.mOutDX,
-        this.mOutDY 
+        this.mOutDY
 	);
 };
 
@@ -575,9 +575,9 @@ GAME.Display.ConvertCanvasToGrayscale = function( canvas ) {
 GAME.Display.RenderTileFull = function( x, y, dst_x, dst_y ) {
     var tile_data = GAME.MapGen.mTileMap;
     var tiles = GAME.Tiles.mTiles;
-    var t = tile_data[x][y], tile_order = tiles[t].order;         
+    var t = tile_data[x][y], tile_order = tiles[t].order;
 
-	// render base tile: 
+	// render base tile:
     this.RenderTile( tiles[t].offset, 5, 2, dst_x, dst_y);
 
 	if ( this.mFlags.tiling === false ) { return; }
@@ -589,7 +589,7 @@ GAME.Display.RenderTileFull = function( x, y, dst_x, dst_y ) {
         neighbor = tile_data[ x + masks[i][0] ][ y + masks[i][1] ];
         neighbor_order = tiles[ neighbor ].order;
         if ( neighbor_order <= tile_order ) { continue; }
-         
+
         if ( r[neighbor] == undefined ) { r[neighbor] = { mask: 0, offset: tiles[neighbor].offset, order: neighbor_order }; }
         r[neighbor].mask += parseInt(i,10);
     }
@@ -728,7 +728,7 @@ GAME.Display.RenderHeroPortrait = function() {
     ctx.drawImage(
         img,
 		0,0, img.width, img.height,
-		0,0, canvas.width, canvas.height 
+		0,0, canvas.width, canvas.height
 	);
 };
 
@@ -760,10 +760,10 @@ GAME.Display.UpdateScreenResolution = function() {
 
     this.mTileSize.hw = Math.floor( this.mTileSize.w / 2 );
     this.mTileSize.hh = Math.floor( this.mTileSize.h / 2 );
-    
+
     if (this.mTileSize.w % 2 === 0) { this.mTileSize.w += 1; }
     if (this.mTileSize.h % 2 === 0) { this.mTileSize.h += 1; }
-	
+
 	GAME.layer_control.SetSize( this.mTileSize.w * this.mOutDX, this.mTileSize.h * this.mOutDY );
 	if ( $("canvas[id*='daynight']").length > 0 ) {
 		this.UpdateDayNightLayer();
@@ -771,26 +771,25 @@ GAME.Display.UpdateScreenResolution = function() {
 };
 
 GAME.Display.ScreenToTileXY = function( x, y ) {
-    var tx, ty;
-    var dx = x - this.mScreenPixelSize.hw;
-    var dy = y - this.mScreenPixelSize.hh;
-    tx = parseInt(Math.floor((dx + this.mOutDX/2) / this.mOutDX),10);
-    ty = parseInt(Math.floor((dy + this.mOutDX/2) / this.mOutDX),10);
-    return { 'x': tx, 'y': ty };
+  var dx = x - this.mScreenPixelSize.hw,
+      dy = y - this.mScreenPixelSize.hh,
+      tx = Math.round(dx / this.mOutDX),
+      ty = Math.round(dy / this.mOutDX);
+  return { 'x': tx, 'y': ty };
 };
 
 GAME.Display.GetPossiblePath = function( x1, y1, x2, y2 ) {
-    
+
     var tiles = GAME.MapGen.mTileMap;
     var objs  = GAME.MapGen.mTerrainMap;
-	var preset = GAME.PlayersControl.GetPreset( GAME.player.mRole );
-    
+    var preset = GAME.PlayersControl.GetPreset( GAME.player.mRole );
+
     var minx = x2 < x1 ? x2 : x1, maxx = x2 > x1 ? x2 : x1;
     var miny = y2 < y1 ? y2 : y1, maxy = y2 > y1 ? y2 : y1;
     var gridx = (maxx - minx) + 10, gridy = (maxy - miny) + 10;
-    
+
     var grid = new PF.Grid(gridx, gridy);
-    
+
     for ( var i = (minx - 5), lenx = ( maxx + 5 ); i < lenx; i++ ) {
         for ( var j = (miny - 5), leny = ( maxy + 5 ); j < leny; j++ ) {
             if ( !GAME.player.CanMoveIntoTile( tiles[i][j] ) ) {
@@ -802,15 +801,15 @@ GAME.Display.GetPossiblePath = function( x1, y1, x2, y2 ) {
 			}
         }
     }
-            
+
     var path = this.mFinder.findPath( x1 - (minx - 5),  y1 - (miny - 5), x2 - (minx - 5), y2 - (miny - 5), grid );
-            
+
     if ( path.length > 0 ) {
         for ( var i = 0; i < path.length; i++ ) {
             path[i] = [ path[i][0] + (minx - 5), path[i][1] + (miny - 5) ];
         }
     }
-    
+
     return path;
 };
 
@@ -845,8 +844,8 @@ GAME.Display.MakeTrailPath = function(path) {
             this.mDX, // height from
             0 - this.mOutDX/2, // x to
             0 - this.mOutDX/2, // y to
-            this.mOutDX, // width 
-            this.mOutDX // height     
+            this.mOutDX, // width
+            this.mOutDX // height
         );
         mouseCtx.restore();
     }

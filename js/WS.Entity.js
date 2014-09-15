@@ -76,7 +76,7 @@ WS.Entity.prototype.TurnPassed = function() {
       GAME.AddTextAnimation('-1 HP', this.mGameX, this.mGameY, '#E00');
       if ( this.mType === 'player' ) {
         this.UpdateOverlay();
-        GAME.Notifications.Post('You are loosing health due to bleeding', 'bad');
+        // GAME.Notifications.Post('You are loosing health due to bleeding', 'bad'); // too much spam
       }
     } else if ( $.gmRndInt(0,100) > 98 ) {
       this.mIsBleeding = false;
@@ -103,9 +103,9 @@ WS.Entity.prototype.TurnPassed = function() {
 };
 
 WS.Entity.prototype.IsOffScreen = function() {
-    var pc = GAME.player.GetGameXY();
-    var c = this.GetGameXY();
-    if ( Math.abs(c.x - pc.x) >= GAME.Display.mTileSize.hw || Math.abs(c.y - pc.y) >= GAME.Display.mTileSize.hh ) { return true; }
+  var pc = GAME.player.GetGameXY();
+  var c = this.GetGameXY();
+  if ( Math.abs(c.x - pc.x) >= GAME.Display.mTileSize.hw || Math.abs(c.y - pc.y) >= GAME.Display.mTileSize.hh ) { return true; }
   return false;
 };
 
