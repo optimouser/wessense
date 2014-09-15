@@ -29,7 +29,7 @@ WS.Sprite = function( opt ) {
 	this.mEffects = [];
 	this.mRangedEffect = undefined;
 
-	this.mCallbackFunc = undefined;
+	this.animation_progress = $.Deferred().resolve();
 };
 
 WS.Sprite.prototype = Object.create( WS.ScreenObject.prototype );
@@ -59,16 +59,7 @@ WS.Sprite.prototype.Update = function( dt ) {
 	}
 
 	if ( is_animation_ended === true ) {
-		//console.log( 'animation ended' );
-		if ( this.mCallbackFunc ) {
-			//console.log('Sprite: executing callback');
-			//console.log( this.mCallbackFunc );
-			var tmp = this.mCallbackFunc.bind({});
-			this.mCallbackFunc = undefined;
-			tmp();
-		} else {
-			//console.log('no callback to call');
-		}
+    this.animation_progress.resolve();
 	}
 
 	if ( this.mEffects.length > 0 ) {
@@ -325,23 +316,22 @@ WS.Sprite.prototype.RenderI = function( hp_pct, level ) {
 	return this;
 };
 
-WS.Sprite.prototype.SetCurrentAnimation = function( animation_name, callback_func ) {
-	if ( this.mCallbackFunc ) {
-		//console.log( 'executing old callback before override:' );
-		//console.log( this.mCallbackFunc );
-		var tmp = this.mCallbackFunc.bind({});
-		this.mCallbackfunc = undefined;
-		tmp();
-	}
-  this.mCallbackFunc = callback_func;
+WS.Sprite.prototype.SetCurrentAnimation = function( animation_name ) {
+  if ( this.mCurrentAnimation == animation_name ) { return this.animation_progress.promise(); }
 
-  if ( this.mCurrentAnimation == animation_name ) { return; }
+  var self = this,
+      new_progress = $.Deferred();
 
-	this.mCurrentAnimation = ( animation_name !== undefined ) ? animation_name : "";
-	//console.log( 'Sprite: setting callback ' );
-	//console.log( this.mCallbackFunc );
-	this.mAnimations[this.mCurrentAnimation].TimeReset();
-	return this;
+  this.animation_progress.done(function() {
+    // KISS: if more than one deferred enqueued, queue them to new progress :)
+    self.animation_progress.done(function() {
+      self.animation_progress = new_progress;
+      self.mCurrentAnimation = ( animation_name !== undefined ) ? animation_name : "";
+      self.mAnimations[self.mCurrentAnimation].TimeReset();
+    })
+  })
+
+  return new_progress.promise();
 };
 
 WS.Sprite.prototype.SetDefaultAnimation = function( animation_name ) {
@@ -379,6 +369,6 @@ WS.Sprite.prototype.AddEffect = function( effect ) {
 WS.Sprite.prototype.SetRangedEffect = function( effect ) {
 	this.mRangedEffect = effect;
 	this.mRangedEffect.SetFlipX( this.mFlipX );
-	return this;
+	return effect.start();
 };
 

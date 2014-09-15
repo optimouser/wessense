@@ -514,106 +514,37 @@ GAME.RunInit = function() {
 };
 
 GAME.EntityAttacksEntityHTH = function( attacker, defender, next_monster_move ) {
+  attacker.SetFlipX(attacker.mGameX > defender.mGameX);
+  defender.SetFlipX(defender.mGameX > attacker.mGameX);
 
-  if ( attacker.mGameX > defender.mGameX ) { attacker.SetFlipX(true); } else { attacker.SetFlipX(false); }
-  if ( defender.mGameX > attacker.mGameX ) { defender.SetFlipX(true); } else { defender.SetFlipX(false); }
+  var attack_anim = attacker.SetCurrentAnimation('attack'),
+      defend_anim = defender.SetCurrentAnimation('defend');
 
-  GAME.mMQ.queue('monster_action_queue', function( next_monster_action ) {
-    //console.log('setting monster hth attack animation');
-    if ( attacker.IsOffScreen() === false ) {
-        attacker.SetCurrentAnimation('attack');
-    }
-    next_monster_action();
-  });
-
-  GAME.mMQ.queue('monster_action_queue', function( next_monster_action ) {
-    //console.log('setting player animation: defend');
-    if ( defender.IsOffScreen() === false ) {
-          defender.SetCurrentAnimation('defend', function() {
-        //console.log('monster defend ended');
-        next_monster_action();
-      });
-    } else {
-      next_monster_action();
-    }
-  });
-
-  GAME.mMQ.queue('monster_action_queue', function( next_monster_action ) {
-    //console.log('calculating hth result for monster attack');
+  $.when(attack_anim, defend_anim).done(function() {
     attacker.AttackHandToHand( defender );
     GAME.mLoopThrottle = true;
-    next_monster_action();
-  });
 
-  GAME.mMQ.queue('monster_action_queue', function( next_monster_action ) {
-    next_monster_action();
-    //console.log('last monster action, moving to next monster');
     next_monster_move();
   });
-
-  GAME.mMQ.dequeue('monster_action_queue');
 };
 
 GAME.EntityAttacksEntityRNG = function( attacker, defender, next_monster_move ) {
-//  console.log('ranged attack performed');
-  if ( attacker.mGameX > defender.mGameX ) { attacker.SetFlipX(true); } else { attacker.SetFlipX(false); }
-  if ( defender.mGameX > attacker.mGameX ) { defender.SetFlipX(true); } else { defender.SetFlipX(false); }
+  attacker.SetFlipX(attacker.mGameX > defender.mGameX);
+  defender.SetFlipX(defender.mGameX > attacker.mGameX);
 
-  GAME.mMQ.queue('monster_action_queue', function( next_monster_action ) {
-//    console.log('setting monster ranged attack animation');
-    if ( attacker.IsOffScreen() === false ) {
-        attacker.SetCurrentAnimation('attack');
-    }
-    next_monster_action();
-  });
+  var effect = attacker.mRngEffect,
+      start = GAME.Display.WorldTileToScreenXY( attacker.mGameX, attacker.mGameY ),
+      stop  = GAME.Display.WorldTileToScreenXY( defender.mGameX, defender.mGameY );
+  effect.SetStartStopXY( 0, 0, stop.x - start.x, stop.y - start.y );
+  var attack_anim = attacker.SetRangedEffect(effect),
+      defend_anim = defender.SetCurrentAnimation('defend');
 
-  GAME.mMQ.queue('monster_action_queue', function( next_monster_action ) {
-//    console.log('executing ranged effect');
-    if ( attacker.IsOffScreen() === false ) {
-      var effect = attacker.mRngEffect;
-          var c = defender.GetGameXY();
-          var start = GAME.Display.WorldTileToScreenXY( attacker.mGameX, attacker.mGameY );
-          var stop  = GAME.Display.WorldTileToScreenXY( c.x, c.y );
-        effect.SetStartStopXY( 0, 0, stop.x - start.x, stop.y - start.y );
-        effect.SetCallback( function() {
-//        console.log('effect ended, next monster action');
-        next_monster_action();
-      });
-          attacker.SetRangedEffect( effect );
-    } else {
-      next_monster_action();
-    }
-  });
+  $.when(attack_anim, defend_anim).done(function() {
+    attacker.AttackRanged( defender );
+    GAME.mLoopThrottle = true;
 
-  GAME.mMQ.queue('monster_action_queue', function( next_monster_action ) {
-    if ( defender.IsOffScreen() === false ) {
-        defender.SetCurrentAnimation('defend', function() {
-//        console.log('defender action ended');
-        next_monster_action();
-      });
-    } else {
-      next_monster_action();
-    }
-  });
-
-  GAME.mMQ.queue('monster_action_queue', function( next_monster_action ) {
-    if ( attacker.IsOffScreen() === false ) {
-          attacker.AttackRanged( defender );
-          GAME.mLoopThrottle = true;
-//      console.log('ranged attack ended');
-      next_monster_action();
-    } else {
-      next_monster_action();
-    }
-  });
-
-  GAME.mMQ.queue('monster_action_queue', function( next_monster_action ) {
-    next_monster_action();
-//    console.log('monster actions ended');
     next_monster_move();
   });
-
-  GAME.mMQ.dequeue('monster_action_queue');
 };
 
 GAME.ProcessMonsterAction = function( monster, next_monster_move ) {
