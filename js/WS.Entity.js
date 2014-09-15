@@ -247,6 +247,7 @@ WS.Entity.prototype.GetXP = function( exp ) {
   if ( this.mType === 'player' ) {
     this.CheckLevelUp();
     this.UpdateOverlay();
+    GAME.AddTextAnimation('+'+ exp +' Exp', this.mGameX, this.mGameY);
   }
 };
 
@@ -509,7 +510,6 @@ WS.Entity.prototype.EntityKilled = function( entity ) {
   entity.mHP[0] = 0;
   if ( entity.mType === 'monster' ) {
     if ( this.mType === 'player' || ( 'clone' == this.monster_type ) ) {
-          GAME.AddTextAnimation('+'+entity.mKEXP+' Exp', this.mGameX, this.mGameY);
       GAME.player.mStats.monsters_killed[0] += 1;
       if ( entity.quest_evil_boss !== undefined ) {
         GAME.player.mStats.evil_boss_killed = true;

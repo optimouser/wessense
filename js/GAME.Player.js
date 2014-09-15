@@ -235,17 +235,14 @@ GAME.Player.prototype.CheckHouseOwnership = function() {
     GAME.Notifications.Post('Village Liberated', 'good');
     this.mStats.houses_owned[0] += 1;
     this.GetXP( 10 );
-    GAME.AddTextAnimation('+10 Exp', this.mGameX, this.mGameY);
   } else if ( house.t.startsWith('mine') ) {
     GAME.Notifications.Post('Quest Progress: Mine Reclaimed', 'good', 2000);
     this.mStats.mines_cleared[0] += 1;
     this.GetXP( 20 );
-    GAME.AddTextAnimation('+20 Exp', this.mGameX, this.mGameY);
   } else {
     GAME.Notifications.Post('Monolith Visited', 'good');
     this.mStats.monoliths_visited[0] += 1;
     this.GetXP( 15 );
-    GAME.AddTextAnimation('+15 Exp', this.mGameX, this.mGameY);
   }
 };
 
@@ -302,7 +299,6 @@ GAME.Player.prototype.PickObjectIfAny = function() {
         this.mCash += cash;
         GAME.AddTextAnimation('+'+cash+' Gold', this.mGameX, this.mGameY, '#EE0');
         this.GetXP( 10 );
-        GAME.AddTextAnimation('+10 Exp', this.mGameX, this.mGameY);
       }
       should_destroy = true;
       break;
@@ -316,7 +312,6 @@ GAME.Player.prototype.PickObjectIfAny = function() {
         this.mCash += cash;
         GAME.AddTextAnimation('+'+cash+' Gold', this.mGameX, this.mGameY, '#EE0');
         this.GetXP( 10 );
-        GAME.AddTextAnimation('+10 Exp', this.mGameX, this.mGameY);
       }
       should_destroy = true;
       break;
@@ -330,7 +325,6 @@ GAME.Player.prototype.PickObjectIfAny = function() {
         this.mCash += cash;
         GAME.AddTextAnimation('+'+cash+' Gold', this.mGameX, this.mGameY, '#EE0');
         this.GetXP( 10 );
-        GAME.AddTextAnimation('+10 Exp', this.mGameX, this.mGameY);
       }
       should_destroy = true;
       break;
@@ -344,7 +338,6 @@ GAME.Player.prototype.PickObjectIfAny = function() {
         this.mCash += cash;
         GAME.AddTextAnimation('+'+cash+' Gold', this.mGameX, this.mGameY, '#EE0');
         this.GetXP( 10 );
-        GAME.AddTextAnimation('+10 Exp', this.mGameX, this.mGameY);
       }
       should_destroy = true;
       break;
@@ -359,7 +352,6 @@ GAME.Player.prototype.PickObjectIfAny = function() {
         this.mCash += cash;
         GAME.AddTextAnimation('+'+cash+' Gold', this.mGameX, this.mGameY, '#EE0');
         this.GetXP( 10 );
-        GAME.AddTextAnimation('+10 Exp', this.mGameX, this.mGameY);
       }
       should_destroy = true;
       break;
@@ -373,7 +365,6 @@ GAME.Player.prototype.PickObjectIfAny = function() {
         this.mCash += cash;
         GAME.AddTextAnimation('+'+cash+' Gold', this.mGameX, this.mGameY, '#EE0');
         this.GetXP( 10 );
-        GAME.AddTextAnimation('+10 Exp', this.mGameX, this.mGameY);
       }
       should_destroy = true;
       break;
@@ -390,7 +381,6 @@ GAME.Player.prototype.PickObjectIfAny = function() {
         this.mCash += cash;
         GAME.AddTextAnimation('+'+cash+' Gold', this.mGameX, this.mGameY, '#EE0');
         this.GetXP( 10 );
-        GAME.AddTextAnimation('+10 Exp', this.mGameX, this.mGameY);
       }
       should_destroy = true;
       break;
@@ -588,7 +578,6 @@ GAME.Player.prototype.PickObjectIfAny = function() {
       GAME.AddTextAnimation('+'+cash+' Gold', this.mGameX, this.mGameY, '#EE0');
       should_destroy = true;
       this.GetXP( 10 );
-      GAME.AddTextAnimation('+10 Exp', this.mGameX, this.mGameY);
       break;
     case 'bonus_gold_medium':
       var cash = $.gmRndInt(4,6);
@@ -597,7 +586,6 @@ GAME.Player.prototype.PickObjectIfAny = function() {
       GAME.AddTextAnimation('+'+cash+' Gold', this.mGameX, this.mGameY, '#EE0');
       should_destroy = true;
       this.GetXP( 10 );
-      GAME.AddTextAnimation('+10 Exp', this.mGameX, this.mGameY);
       break;
     case 'bonus_gold_large':
       var cash = $.gmRndInt(6,10);
@@ -606,7 +594,6 @@ GAME.Player.prototype.PickObjectIfAny = function() {
       GAME.AddTextAnimation('+'+cash+' Gold', this.mGameX, this.mGameY, '#EE0');
       should_destroy = true;
       this.GetXP( 10 );
-      GAME.AddTextAnimation('+10 Exp', this.mGameX, this.mGameY);
       break;
     case 'bonus_chest_gold':
       var cash = $.gmRndInt(8,14);
@@ -615,7 +602,6 @@ GAME.Player.prototype.PickObjectIfAny = function() {
       GAME.AddTextAnimation('+'+cash+' Gold', this.mGameX, this.mGameY, '#EE0');
       should_destroy = true;
       this.GetXP( 10 );
-      GAME.AddTextAnimation('+10 Exp', this.mGameX, this.mGameY);
       break;
     case 'bonus_barrel_floating':
       var cash = 1;
