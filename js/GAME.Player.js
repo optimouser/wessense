@@ -129,41 +129,45 @@ GAME.Player.prototype.CheckStartingLocation = function( x, y ) {
 
 
 GAME.Player.prototype.MoveToDXY = function( dx, dy ) {
-  var c = { 'x': this.mGameX + dx, 'y': this.mGameY + dy };
-  var tile = GAME.MapGen.GetTile( c.x, c.y );
-  var obj  = GAME.MapGen.GetTerrainObject( c.x, c.y );
+  if (dx !== 0 || dy !== 0) {
+    // if you cast a forest under yourself you will not be able even pause then
 
-  // is path clear?
-  if ( !this.CanMoveIntoTile( tile ) || ( obj !== undefined && !this.CanMoveIntoObject( obj.t ) ) ) { return false; }
-  var monster = GAME.Monsters.IsMonsterThere( c.x, c.y );
-  if ( monster !== false ) { return false; }
+    var c = { 'x': this.mGameX + dx, 'y': this.mGameY + dy };
+    var tile = GAME.MapGen.GetTile( c.x, c.y );
+    var obj  = GAME.MapGen.GetTerrainObject( c.x, c.y );
 
-  // okay, our path is clear:
-  if ( GAME.overlays[ tile ] !== undefined && this.mIsFlying === false ) {
-    var ship = GAME.data['position_ship'];
-    if ( c.x === ship.x && c.y === ship.y ) {
-      this.RemoveOverlay();
-            if ( this.mStats.hostage_released === true ) {
-                GAME.GameOver( true );
-            } else {
-        console.log('need to release hostage first..');
+    // is path clear?
+    if ( !this.CanMoveIntoTile( tile ) || ( obj !== undefined && !this.CanMoveIntoObject( obj.t ) ) ) { return false; }
+    var monster = GAME.Monsters.IsMonsterThere( c.x, c.y );
+    if ( monster !== false ) { return false; }
+
+    // okay, our path is clear:
+    if ( GAME.overlays[ tile ] !== undefined && this.mIsFlying === false ) {
+      var ship = GAME.data['position_ship'];
+      if ( c.x === ship.x && c.y === ship.y ) {
+        this.RemoveOverlay();
+              if ( this.mStats.hostage_released === true ) {
+                  GAME.GameOver( true );
+              } else {
+          console.log('need to release hostage first..');
+        }
+      } else {
+        this.SetOverlay( GAME.overlays[ tile ] );
+        //this.AddEffect( $.extend( {}, GAME.effects['watersplash'] ) );
       }
     } else {
-      this.SetOverlay( GAME.overlays[ tile ] );
-      //this.AddEffect( $.extend( {}, GAME.effects['watersplash'] ) );
+      this.RemoveOverlay();
     }
-  } else {
-    this.RemoveOverlay();
-  }
 
-  if ( dx < 0 && this.mFlipX === false ) {
-    this.SetFlipX( true );
-  } else if ( dx > 0 && this.mFlipX === true ) {
-    this.SetFlipX( false );
+    if ( dx < 0 && this.mFlipX === false ) {
+      this.SetFlipX( true );
+    } else if ( dx > 0 && this.mFlipX === true ) {
+      this.SetFlipX( false );
+    }
+    this.SetGameXY( c.x, c.y );
+    this.PickObjectIfAny();
+    this.CheckHouseOwnership();
   }
-  this.SetGameXY( c.x, c.y );
-  this.PickObjectIfAny();
-  this.CheckHouseOwnership();
 
   amplify.publish('PLAYER_MOVED');
 
