@@ -878,7 +878,7 @@ GAME.Update = function(dt) {
     if ( key.isPressed('a') ) {
       var c = GAME.player.GetGameXY();
       var targets = key.shift ? ['aggressive','angered','frenzied', 'neutral'] : ['aggressive','angered','frenzied'];
-      var target = GAME.Monsters.FindNearestMonsterInRadius(c.x, c.y, GAME.player.GetRangedRange(), targets);
+      var target = GAME.Monsters.FindNearestMonsterInRadius(c.x, c.y, GAME.player.GetRangedRange() || 1, targets);
       if (target) {
         GAME.player.tryAttack(target);
         this.mLastKeyPress = 0;
