@@ -657,22 +657,20 @@ GAME.Player.prototype.PickObjectIfAny = function() {
 };
 
 GAME.Player.prototype.tryAttack = function(monster) {
-  var mcoord = monster.GetGameXY();
-  this.SetFlipX( this.mGameX > mcoord.x );
-  if ( this.HasHTHAttack() && monster.DistanceTo( this ) <= 1.01 ) {
-//        console.log('performing hth attack');
-    GAME.EntityAttacksEntityHTH(this, monster, function() {
-//          console.log('player hth attack ended');
-      amplify.publish('TURN_ENEMY_START');
-    });
-  } else if ( this.HasRangedAttack() === true
-      && monster.DistanceTo( this ) <= this.GetRangedRange()
-      && this.CheckLosToXY( mcoord.x, mcoord.y ) === true
-    ) {
-//        console.log('queuing player attack animation');
-    GAME.EntityAttacksEntityRNG(this, monster, function() {
-//          console.log('player rng attack ended');
-      amplify.publish('TURN_ENEMY_START');
-    });
+  if (GAME.mTimeStop === 0) {
+    var mcoord = monster.GetGameXY();
+    this.SetFlipX( this.mGameX > mcoord.x );
+    if ( this.HasHTHAttack() && monster.DistanceTo( this ) <= 1.01 ) {
+      GAME.EntityAttacksEntityHTH(this, monster, function() {
+        amplify.publish('TURN_ENEMY_START');
+      });
+    } else if ( this.HasRangedAttack() === true
+        && monster.DistanceTo( this ) <= this.GetRangedRange()
+        && this.CheckLosToXY( mcoord.x, mcoord.y ) === true
+      ) {
+      GAME.EntityAttacksEntityRNG(this, monster, function() {
+        amplify.publish('TURN_ENEMY_START');
+      });
+    }
   }
 }

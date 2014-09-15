@@ -841,7 +841,7 @@ GAME.Dialogs.DisplayLandSelectionDialog = function() {
         GAME.data[land_param_key[i]] = land_param_values[i][ui.value];
         window.localStorage['lsd_' + i] = ui.value;
       }
-    }).slider('value', window.localStorage['lsd_' + i] || defaults[i]);
+    }).slider('value', window.localStorage['lsd_' + i] || land_param_defaults[i]);
   })
 
   $('#intro_seed').val(Math.random());

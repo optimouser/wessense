@@ -244,7 +244,7 @@ GAME.RunInit = function() {
     var pcoord = GAME.player.GetGameXY();
     var monster = GAME.Monsters.IsMonsterThere( pcoord.x + dir.x, pcoord.y + dir.y );
 //    console.log('checking for monster');
-    if ( monster !== false && GAME.mTimeStop === 0 ) {
+    if ( monster !== false ) {
 //      console.log('monster is there..');
       GAME.player.tryAttack(monster);
     } else {
@@ -340,7 +340,8 @@ GAME.RunInit = function() {
   });
 
   amplify.subscribe('PLAYER_MOVED', function() {
-    var obj  = GAME.MapGen.GetTerrainObject(GAME.player.mGameX, GAME.player.mGameY);
+    var c = GAME.player.GetGameXY();
+    var obj  = GAME.MapGen.GetTerrainObject(c.x, c.y);
     if ( obj !== undefined ) {
       if ( obj.t === 'mine' && obj.mudcrawler_released === false ) {
         // mudcrawler
@@ -348,7 +349,7 @@ GAME.RunInit = function() {
         GAME.Monsters.Create( 'mudcrawler', cmud.x, cmud.y );
         GAME.Notifications.Post('Mud Crawler was hiding in the mine!');
         obj.mudcrawler_released = true;
-      } else if ( obj.t === 'bonus_orc_tower' && this.mStats.tower_key_found === true ) {
+      } else if ( obj.t === 'bonus_orc_tower' && GAME.player.mStats.tower_key_found === true ) {
         // hostage
         GAME.Objects.DestroyTerrain( c.x, c.y );
         var pos = GAME.MapGen.SearchRadius( c.x, c.y, ['grass','sand','grass_pale','dirt','snow','soil','mud'] );
