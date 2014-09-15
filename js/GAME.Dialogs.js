@@ -1,3 +1,25 @@
+(function() {
+
+  var heroes = {
+    'role_1_0': "<b>Human Knight</b><br><small>Heavy Armor, Hates Magic Users, Strike!</small>",
+    'role_1_1': "<b>Human Mage</b><br><small> Magic User, Hates Undead, Magical Shield</small>",
+    'role_2_0': "<b>Elven Ranger</b><br><small>Expert Archer, Hates Undead, Instant Kill, Friend of Woods</small>",
+    'role_2_1': "<b>Elven Fighter</b><br><small>Expert Swordsman, Hates Undead, Blade Virtue, Friend of Woods</small>",
+    'role_3_0': "<b>Dwarven Scout</b><br><small>Throws Hatchets, Hates Orcs, Deadly Hatchets, Mountain Expert</small>",
+    'role_3_1': "<b>Dwarven Thunderer</b><br><small>Expert Musketeer, Hates Orcs, Mountain Expert</small>",
+    'role_4_0': "<b>Human Thief</b><br><small>Low HP, Deadly Daggers. Hates Undead and Magic Users, Terrain Master</small>",
+    'role_4_1': "<b>Human Cavalier</b><br><small>Heavy Armor, Hates Orcs, Crossbow Mastery</small>"
+  };
+
+  var land_param_defaults = [ 1, 2, 2, 2, 2];
+  var land_param_key = ['game_difficulty', 'map_size_factor', 'resource_factor', 'monsters_factor', 'animation_speed'];
+  var land_param_values = [
+    [0.5, 1.0, 2.0],
+    [1.20, 1.15, 1.10, 1.05, 1.00],
+    [0.30, 0.60, 1.00, 1.50, 2.00],
+    [0.50, 0.75, 1.00, 1.25, 2.00],
+    [2.00, 1.50, 1.00, 0.75, 0.50]
+  ];
 
 GAME.Dialogs = GAME.Dialogs || {
   mCurrentScreen: 0,
@@ -624,9 +646,9 @@ GAME.Dialogs.DisplayMainQuestDialog = function() {
     var text = '<div id="mainquestdialog" title="Main Quest">';
     text += '</div>';
   $('body').append(text);
-    $("#mainquestdialog").dialog({
-        autoOpen: true,
-        width: 640,
+  $("#mainquestdialog").dialog({
+    autoOpen: true,
+    width: 640,
     height: 620,
     closeOnEscape: false,
     minHeight: "auto",
@@ -636,7 +658,7 @@ GAME.Dialogs.DisplayMainQuestDialog = function() {
       'Prev' : function() {
         GAME.Dialogs.mCurrentScreen -= 1;
         if ( GAME.Dialogs.mCurrentScreen >= 0 ) {
-          eval( 'GAME.Dialogs.QuestScreen' + GAME.Dialogs.mQuestScreens[GAME.Dialogs.mCurrentScreen]+'()' );
+          GAME.Dialogs['QuestScreen' + GAME.Dialogs.mQuestScreens[GAME.Dialogs.mCurrentScreen]]();
         } else {
           $( this ).dialog("close");
           GAME.Dialogs.DisplayHeroSelectionDialog();
@@ -645,20 +667,20 @@ GAME.Dialogs.DisplayMainQuestDialog = function() {
       'Next' : function() {
         GAME.Dialogs.mCurrentScreen += 1;
         if ( GAME.Dialogs.mCurrentScreen < GAME.Dialogs.mQuestScreens.length ) {
-          eval( 'GAME.Dialogs.QuestScreen' + GAME.Dialogs.mQuestScreens[GAME.Dialogs.mCurrentScreen]+'()' );
+          GAME.Dialogs['QuestScreen' + GAME.Dialogs.mQuestScreens[GAME.Dialogs.mCurrentScreen]]();
         } else {
-                  $( this ).dialog( "close" );
+          $( this ).dialog( "close" );
           GAME.Dialogs.DisplayLandSelectionDialog();
         }
       },
-            'Skip Quest Intro': function() {
-                $( this ).dialog( "close" );
+      'Skip Quest Intro': function() {
+        $( this ).dialog( "close" );
         GAME.Dialogs.DisplayLandSelectionDialog();
-            }
-        }
-    });
+      }
+    }
+  });
 
-  eval( 'GAME.Dialogs.QuestScreen' + GAME.Dialogs.mQuestScreens[GAME.Dialogs.mCurrentScreen]+'()' );
+  GAME.Dialogs['QuestScreen' + GAME.Dialogs.mQuestScreens[GAME.Dialogs.mCurrentScreen]]();
 };
 
 GAME.Dialogs.DisplayQuestsDialog = function() {
@@ -756,10 +778,22 @@ GAME.Dialogs.DisplayIntroDialog = function() {
         modal: true,
         dialogClass: "no-close",
         buttons: {
-            'New Game': function() {
-                $( this ).dialog( "close" );
-        GAME.Dialogs.DisplayHeroSelectionDialog();
-            }
+          'New Game': function() {
+            $( this ).dialog( "close" );
+            GAME.Dialogs.DisplayHeroSelectionDialog();
+          },
+          'Feeling Lucky': function() {
+            debugger;
+            $( this ).dialog( "close" );
+            GAME.data['role'] = $.gmShuffleArray($.map(heroes, function(_txt, r) { return r}))[0];
+
+            GAME.data['seed'] = Math.random();
+            $.each(land_param_key, function(i) {
+               GAME.data[ this ] = land_param_values[i][window.localStorage['lsd_' + i] || land_param_defaults[i]];
+            });
+
+            GAME.Dialogs.ProceedWithNewGame();
+          }
         }
     });
 
@@ -782,11 +816,6 @@ GAME.Dialogs.DisplayLandSelectionDialog = function() {
   text += '<tr><td colspan=3><hr></td></tr>';
     text += '<tr><td>Animation Speed</td><td><div id="slider4"></div></td><td><div id="slidertext4"></div></td></tr>';
     text += '</table>';
-    text += '<input type="hidden" id="intro_param_difficulty">';
-    text += '<input type="hidden" id="intro_param_land">';
-    text += '<input type="hidden" id="intro_param_resources">';
-    text += '<input type="hidden" id="intro_param_monsters">';
-    text += '<input type="hidden" id="intro_param_speed">';
     text += '</div>';
     text += '</div>';
   $('body').append(text);
@@ -799,18 +828,6 @@ GAME.Dialogs.DisplayLandSelectionDialog = function() {
     ['Very Slow', 'Slower', 'Normal', 'Faster', 'Fastest']
   ];
 
-  var values = [
-    [0.5, 1.0, 2.0],
-    [1.20, 1.15, 1.10, 1.05, 1.00],
-    [0.30, 0.60, 1.00, 1.50, 2.00],
-    [0.50, 0.75, 1.00, 1.25, 2.00],
-    [2.00, 1.50, 1.00, 0.75, 0.50]
-  ];
-
-  var defaults = [ 1, 2, 2, 2, 2];
-
-  var param_names = ['difficulty', 'land', 'resources', 'monsters', 'speed'];
-
   $.each(textlabels, function(i) {
     $('#slider' + i).slider({
       min: 0,
@@ -821,7 +838,7 @@ GAME.Dialogs.DisplayLandSelectionDialog = function() {
       },
       change: function(event, ui) {
         $('#slidertext' + i).text( textlabels[i][ui.value] );
-        $('#intro_param_' + param_names[i]).val( values[i][ui.value] );
+        GAME.data[land_param_key[i]] = land_param_values[i][ui.value];
         window.localStorage['lsd_' + i] = ui.value;
       }
     }).slider('value', window.localStorage['lsd_' + i] || defaults[i]);
@@ -838,11 +855,6 @@ GAME.Dialogs.DisplayLandSelectionDialog = function() {
     buttons: {
       'START ADVENTURE': function() {
         $( this ).dialog( "close" );
-        GAME.data['game_difficulty'] = parseFloat( $('#intro_param_difficulty').val() );
-        GAME.data['map_size_factor'] = parseFloat( $('#intro_param_land').val() );
-        GAME.data['resource_factor'] = parseFloat( $('#intro_param_resources').val() );
-        GAME.data['monsters_factor'] = parseFloat( $('#intro_param_monsters').val() );
-        GAME.data['animation_speed'] = parseFloat( $('#intro_param_speed').val() );
         GAME.data['seed'] = parseFloat( $('#intro_seed').val() );
         GAME.Dialogs.ProceedWithNewGame();
       }
@@ -856,18 +868,6 @@ GAME.Dialogs.DisplayHeroSelectionDialog = function() {
     $('#herodialog').dialog('destroy').remove();
   }
 
-  var desc = {
-    'role_1_0': "<b>Human Knight</b><br><small>Heavy Armor, Hates Magic Users, Strike!</small>",
-    'role_1_1': "<b>Human Mage</b><br><small> Magic User, Hates Undead, Magical Shield</small>",
-    'role_2_0': "<b>Elven Ranger</b><br><small>Expert Archer, Hates Undead, Instant Kill, Friend of Woods</small>",
-    'role_2_1': "<b>Elven Fighter</b><br><small>Expert Swordsman, Hates Undead, Blade Virtue, Friend of Woods</small>",
-    'role_3_0': "<b>Dwarven Scout</b><br><small>Throws Hatchets, Hates Orcs, Deadly Hatchets, Mountain Expert</small>",
-    'role_3_1': "<b>Dwarven Thunderer</b><br><small>Expert Musketeer, Hates Orcs, Mountain Expert</small>",
-    'role_4_0': "<b>Human Thief</b><br><small>Low HP, Deadly Daggers. Hates Undead and Magic Users, Terrain Master</small>",
-    'role_4_1': "<b>Human Cavalier</b><br><small>Heavy Armor, Hates Orcs, Crossbow Mastery</small>"
-  };
-
-
     var text = '<div id="herodialog" title="W.Essense: Online Rogue-like, inspired by Battle for Wesnoth and Wayward">';
     text += '<table border=0 width="100%">';
     text += '<tr><td><img data-role="role_1_0" src="img/portraits/role_1_0.gif" class="disableSelection"></td><td><img data-role="role_2_0" src="img/portraits/role_2_0.gif" class="disableSelection"></td><td><img data-role="role_3_0" src="img/portraits/role_3_0.gif" class="disableSelection"></td><td><img data-role="role_4_0" src="img/portraits/role_4_0.gif" class="disableSelection"></td></tr>';
@@ -879,7 +879,7 @@ GAME.Dialogs.DisplayHeroSelectionDialog = function() {
 
   $( "#herodialog img" )
     .mouseenter(function() {
-      $('#hero_desc').html(desc[ $(this).data('role') ]);
+      $('#hero_desc').html(heroes[ $(this).data('role') ]);
     })
     .mouseleave(function() {
       $('#hero_desc').html('<b>Choose Your Hero</b><br><small>each hero has specific traits, choose wisely!');
@@ -892,7 +892,7 @@ GAME.Dialogs.DisplayHeroSelectionDialog = function() {
       $(this).unbind('mouseenter').unbind('mouseleave');
     });
     GAME.data['role'] = $(this).data('role');
-    $('#hero_desc').html(desc[ $(this).data('role') ]);
+    $('#hero_desc').html(heroes[ $(this).data('role') ]);
     $('#herodialog img').css({
       'background': 'radial-gradient(ellipse at center, #f8ffe8 0%,#e3f5ab 33%,#b7df2d 100%)',
       'border': '3px solid #555'
@@ -923,3 +923,4 @@ GAME.Dialogs.DisplayHeroSelectionDialog = function() {
         }
     });
 };
+})();
