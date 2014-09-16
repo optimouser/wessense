@@ -31,6 +31,9 @@ GAME.Images.list = [
         ['sandstorm',	'img/effects/sandstorm.png'	],
         ['magicshield',	'img/effects/magicshield.png'],
         ['magichalo',	'img/effects/magichalo.png'],
+        ['boom',		'img/effects/boom.png'],
+        ['tornado-ring','img/effects/tornado-ring.png'],
+        ['small-lightning','img/effects/small-lightning.png'],
 
         ['arrows',		'img/ranged_effects/arrows.png'		],
         ['battleaxe',	'img/ranged_effects/battleaxe.png' 	],

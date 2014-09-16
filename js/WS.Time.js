@@ -10,12 +10,12 @@ WS.Time = function( opt ) {
 		"morning"	: 3 * Math.PI / 2 - Math.PI / 4
 	};
 	this.mLasts = {
-		"day"		:  300,	
+		"day"		:  300,
 		"evening"	:  50,
-		"night"		:  200,
+		"night"		:  150,
 		"morning"	:  50
 	};
-	this.mCycle = { 
+	this.mCycle = {
 		"day"		: "evening",
 		"evening"	: "night",
 		"night"		: "morning",
@@ -57,7 +57,7 @@ WS.Time.prototype.TurnPassed = function() {
 	}
 //	console.log( 'turn: ' + this.mTurns );
 //	console.log( 'time_in_day: ' + this.mTimeInDay );
-//	console.log( 'time_of_day: ' + this.mTimeOfDay ); 
+//	console.log( 'time_of_day: ' + this.mTimeOfDay );
 };
 
 WS.Time.prototype.GetTimeOfDay = function() {

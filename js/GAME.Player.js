@@ -129,6 +129,8 @@ GAME.Player.prototype.CheckStartingLocation = function( x, y ) {
 
 
 GAME.Player.prototype.MoveToDXY = function( dx, dy ) {
+  if ( ( this.mGameX + dx ) < 1 || ( this.mGameX + dx ) > 511
+    || ( this.mGameY + dy ) < 1 || ( this.mGameY + dy ) > 511 ) { return false; }
   if (dx !== 0 || dy !== 0) {
     // if you cast a forest under yourself you will not be able even pause then
 
@@ -235,11 +237,11 @@ GAME.Player.prototype.CheckHouseOwnership = function() {
     GAME.Notifications.Post('Village Liberated', 'good');
     this.mStats.houses_owned[0] += 1;
     this.GetXP( 10 );
-  } else if ( house.t.startsWith('mine') ) {
+  } else if ( house.t.startsWith('mine') && GAME.data['role'].startsWith('role_3')) {
     GAME.Notifications.Post('Quest Progress: Mine Reclaimed', 'good', 2000);
     this.mStats.mines_cleared[0] += 1;
     this.GetXP( 20 );
-  } else {
+  } else if ( house.t.startsWith('monolith') ) {
     GAME.Notifications.Post('Monolith Visited', 'good');
     this.mStats.monoliths_visited[0] += 1;
     this.GetXP( 15 );
