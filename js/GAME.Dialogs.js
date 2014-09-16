@@ -783,7 +783,6 @@ GAME.Dialogs.DisplayIntroDialog = function() {
             GAME.Dialogs.DisplayHeroSelectionDialog();
           },
           'Feeling Lucky': function() {
-            debugger;
             $( this ).dialog( "close" );
             GAME.data['role'] = $.gmShuffleArray($.map(heroes, function(_txt, r) { return r}))[0];
 
