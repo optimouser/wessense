@@ -146,3 +146,11 @@ $.gmMakeStandardAnimations = function( img_name, offset, speed ) {
 	return animations;
 };
 
+$.gmSupportsHTML5Storage = function() {
+  try {
+    return 'localStorage' in window && window['localStorage'] !== null;
+  } catch (e) {
+    return false;
+  }
+};
+

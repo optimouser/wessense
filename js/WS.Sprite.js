@@ -59,10 +59,7 @@ WS.Sprite.prototype.Update = function( dt ) {
 	}
 
 	if ( is_animation_ended === true ) {
-		//console.log( 'animation ended' );
 		if ( this.mCallbackFunc !== undefined ) {
-			//console.log('Sprite: executing callback');
-			//console.log( this.mCallbackFunc );
 			var tmp = this.mCallbackFunc.bind({});
 			this.mCallbackFunc = undefined;
 			tmp();
@@ -327,19 +324,17 @@ WS.Sprite.prototype.RenderI = function( hp_pct, level ) {
 
 WS.Sprite.prototype.SetCurrentAnimation = function( animation_name, callback_func ) {
 	if ( this.mCurrentAnimation == animation_name ) { return; }
-
 	if ( this.mCallbackFunc !== undefined ) {
-		//console.log( 'executing old callback before override:' );
-		//console.log( this.mCallbackFunc );
 		var tmp = this.mCallbackFunc.bind({});
 		this.mCallbackfunc = undefined;
+		this.mCurrentAnimation = ( animation_name !== undefined ) ? animation_name : "";
+		this.mCallbackFunc = ( callback_func !== undefined ) ? callback_func : undefined;
+		this.mAnimations[this.mCurrentAnimation].TimeReset();
 		tmp();
+		return;
 	}
-
 	this.mCurrentAnimation = ( animation_name !== undefined ) ? animation_name : "";
 	this.mCallbackFunc = ( callback_func !== undefined ) ? callback_func : undefined;
-	//console.log( 'Sprite: setting callback ' );
-	//console.log( this.mCallbackFunc );
 	this.mAnimations[this.mCurrentAnimation].TimeReset();
 	return this;
 };

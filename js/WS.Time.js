@@ -12,7 +12,7 @@ WS.Time = function( opt ) {
 	this.mLasts = {
 		"day"		:  300,	
 		"evening"	:  50,
-		"night"		:  200,
+		"night"		:  100,
 		"morning"	:  50
 	};
 	this.mCycle = { 

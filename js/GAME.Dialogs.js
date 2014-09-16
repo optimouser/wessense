@@ -767,28 +767,12 @@ GAME.Dialogs.DisplayLandSelectionDialog = function() {
 	if ( $('#landselectiondialog').length > 0 ) {
 		 $('#landselectiondialog').dialog('destroy').remove();
 	}
-
-    var text = '<div id="landselectiondialog" title="W.Essense: Online Rogue-like, inspired by Battle for Wesnoth and Wayward">';
-    text += '<div id="introoptions">';
-    text += '<table border=0 width="100%">';
-    text += '<tr><th colspan=3>TUNE WORLD PARAMETERS</th></tr>';
-    text += '<tr><td width="25%">Difficulty</td><td><div id="slider0"></div></td><td width="20%"><div id="slidertext0"></div></td></tr>';
-    text += '<tr><td>Land Size</td><td><div id="slider1"></div></td><td width="20%"><div id="slidertext1"></div></td></tr>';
-    text += '<tr><td>Resources</td><td><div id="slider2"></div></td><td><div id="slidertext2"></div></td></tr>';
-    text += '<tr><td>Monsters</td><td><div id="slider3"></div></td><td><div id="slidertext3"></div></td></tr>';
-    text += '<tr><td>World Seed</td><td colspan="2"> <input type="text" value="" id="intro_seed"></td></tr>';
-	text += '<tr><td colspan=3><hr></td></tr>';
-    text += '<tr><td>Animation Speed</td><td><div id="slider4"></div></td><td><div id="slidertext4"></div></td></tr>';
-    text += '</table>';
-    text += '<input type="hidden" id="intro_param_difficulty" value="1.00">';
-    text += '<input type="hidden" id="intro_param_land" value="1.10">';
-    text += '<input type="hidden" id="intro_param_resources" value="1.0">';
-    text += '<input type="hidden" id="intro_param_monsters" value="1.0">';
-    text += '<input type="hidden" id="intro_param_speed" value="1.0">';
-    text += '</div>';
-    text += '</div>';
-	$('body').append(text);
-
+	var sopts = GAME.Dialogs.LoadOptionsState();
+	if ( sopts instanceof Array && sopts.length === 5 ) {
+		// do nothing, loaded from localStorage
+	} else {
+		 sopts = [1,2,2,2,2]; 
+	}
     var textlabels0 = ['Easy', 'Normal', 'Hard'];
     var textlabels1 = ['Tiny', 'Small', 'Average', 'Large', 'Huge'];
     var textlabels2 = ['Very Rare', 'Rare', 'Average', 'Generous', 'Abundant'];
@@ -801,14 +785,29 @@ GAME.Dialogs.DisplayLandSelectionDialog = function() {
     var data_monsters	= [0.50, 0.75, 1.00, 1.25, 2.00]; // slider 3
     var data_anim_speed	= [2.00, 1.50, 1.00, 0.75, 0.50]; // slider 4
 
-    $('#slidertext0').text( textlabels0[1] );
-    $('#slidertext1').text( textlabels1[2] );
-    $('#slidertext2').text( textlabels2[2] );
-    $('#slidertext3').text( textlabels3[2] );
-    $('#slidertext4').text( textlabels3[2] );
+    var text = '<div id="landselectiondialog" title="W.Essense: Online Rogue-like, inspired by Battle for Wesnoth and Wayward">';
+    text += '<div id="introoptions">';
+    text += '<table border=0 width="100%">';
+    text += '<tr><th colspan=3>TUNE WORLD PARAMETERS</th></tr>';
+    text += '<tr><td width="25%">Difficulty</td><td><div id="slider0"></div></td><td width="20%"><div id="slidertext0">'+textlabels0[ sopts[0] ]+'</div></td></tr>';
+    text += '<tr><td>Land Size</td><td><div id="slider1"></div></td><td width="20%"><div id="slidertext1">'+textlabels1[ sopts[1] ]+'</div></td></tr>';
+    text += '<tr><td>Resources</td><td><div id="slider2"></div></td><td><div id="slidertext2">'+textlabels2[ sopts[2] ]+'</div></td></tr>';
+    text += '<tr><td>Monsters</td><td><div id="slider3"></div></td><td><div id="slidertext3">'+textlabels3[ sopts[3] ]+'</div></td></tr>';
+    text += '<tr><td>World Seed</td><td colspan="2"> <input type="text" value="" id="intro_seed"></td></tr>';
+	text += '<tr><td colspan=3><hr></td></tr>';
+    text += '<tr><td>Animation Speed</td><td><div id="slider4"></div></td><td><div id="slidertext4">'+textlabels4[ sopts[4] ]+'</div></td></tr>';
+    text += '</table>';
+    text += '<input type="hidden" id="intro_param_difficulty" value="'+data_difficulty[ sopts[0] ]+'">';
+    text += '<input type="hidden" id="intro_param_land" value="'+data_land[ sopts[1] ]+'">';
+    text += '<input type="hidden" id="intro_param_resources" value="'+ data_resources[ sopts[2] ]+'">';
+    text += '<input type="hidden" id="intro_param_monsters" value="'+ data_monsters[ sopts[3] ]+'">';
+    text += '<input type="hidden" id="intro_param_speed" value="'+data_anim_speed[ sopts[4] ]+'">';
+    text += '</div>';
+    text += '</div>';
+	$('body').append(text);
 
     $('#slider0').slider({
-        value:1,
+        value: sopts[0],
         min: 0,
         max: 2,
         step: 1,
@@ -819,7 +818,7 @@ GAME.Dialogs.DisplayLandSelectionDialog = function() {
     });
 
     $('#slider1').slider({
-        value:2,
+        value: sopts[1],
         min: 0,
         max: 4,
         step: 1,
@@ -830,7 +829,7 @@ GAME.Dialogs.DisplayLandSelectionDialog = function() {
     });
 
     $('#slider2').slider({
-        value:2,
+        value: sopts[2],
         min: 0,
         max: 4,
         step: 1,
@@ -841,7 +840,7 @@ GAME.Dialogs.DisplayLandSelectionDialog = function() {
     });
 
     $('#slider3').slider({
-        value:2,
+        value: sopts[3],
         min: 0,
         max: 4,
         step: 1,
@@ -852,7 +851,7 @@ GAME.Dialogs.DisplayLandSelectionDialog = function() {
     });
 
     $('#slider4').slider({
-        value:2,
+        value: sopts[4],
         min: 0,
         max: 4,
         step: 1,
@@ -873,6 +872,16 @@ GAME.Dialogs.DisplayLandSelectionDialog = function() {
         buttons: {
             'START ADVENTURE': function() {
                 $( this ).dialog( "close" );
+				
+				var options = [ 
+					$('#slider0').slider("value"),
+					$('#slider1').slider("value"),
+					$('#slider2').slider("value"),
+					$('#slider3').slider("value"),
+					$('#slider4').slider("value")
+				];
+				GAME.Dialogs.SaveOptionsState( options );
+
 				GAME.data['game_difficulty'] = parseFloat( $('#intro_param_difficulty').val() );
 				GAME.data['map_size_factor'] = parseFloat( $('#intro_param_land').val() );
 				GAME.data['resource_factor'] = parseFloat( $('#intro_param_resources').val() );
@@ -907,7 +916,7 @@ GAME.Dialogs.DisplayHeroSelectionDialog = function() {
     text += '<table border=0 width="100%">';
     text += '<tr><td><img data-role="role_1_0" src="img/portraits/role_1_0.gif" class="disableSelection"></td><td><img data-role="role_2_0" src="img/portraits/role_2_0.gif" class="disableSelection"></td><td><img data-role="role_3_0" src="img/portraits/role_3_0.gif" class="disableSelection"></td><td><img data-role="role_4_0" src="img/portraits/role_4_0.gif" class="disableSelection"></td></tr>';
     text += '<tr><td><img data-role="role_1_1" src="img/portraits/role_1_1.gif" class="disableSelection"></td><td><img data-role="role_2_1" src="img/portraits/role_2_1.gif" class="disableSelection"></td><td><img data-role="role_3_1" src="img/portraits/role_3_1.gif" class="disableSelection"></td><td><img data-role="role_4_1" src="img/portraits/role_4_1.gif" class="disableSelection"></td></tr>';
-    text += '<tr><td colspan="4"><div id="hero_desc"><b>Choose Your Hero</b><br><small>each hero has specific traits, choose wisely!</small></div></td></tr>';
+    text += '<tr><td colspan="4"><div id="hero_desc"><b>Click on Character portrait to continue</b><br><small>Each hero has specific traits, so choose wisely!</small></div></td></tr>';
     text += '</table>';
 	text += '</div>';
 	$('body').append(text);
@@ -917,7 +926,7 @@ GAME.Dialogs.DisplayHeroSelectionDialog = function() {
 			$('#hero_desc').html(desc[ $(this).data('role') ]);
 		})
 		.mouseleave(function() {
-			$('#hero_desc').html('<b>Choose Your Hero</b><br><small>each hero has specific traits, choose wisely!');
+			$('#hero_desc').html('<b>Click on Character portrait to continue</b><br><small>Each hero has specific traits, so choose wisely!');
 		});
 
 	$('#herodialog img').click(function() {
@@ -937,6 +946,7 @@ GAME.Dialogs.DisplayHeroSelectionDialog = function() {
 			'background': 'radial-gradient(ellipse at center, #fefcea 0%,#f7bf09 100%)',
 			'border': '3px solid #FFF' 
 		});
+	    $('#random_hero_button').hide(0);
 		$('#next_button').show(0);
 	});
 
@@ -948,6 +958,15 @@ GAME.Dialogs.DisplayHeroSelectionDialog = function() {
         modal: true,
         dialogClass: "no-close",
         buttons: {
+			'Random Hero': {
+				text: "Select Hero Randomly",
+				id: "random_hero_button",
+				click: function() {
+	                $('#random_hero_button').hide(0);
+					var role = 'role_'+$.gmRndInt(1,4)+'_'+$.gmRndInt(0,1);
+					$('img[data-role='+role+']').click();
+				}
+			},
             'NEXT': {
 				text: "NEXT",
 				id: "next_button",
@@ -960,3 +979,19 @@ GAME.Dialogs.DisplayHeroSelectionDialog = function() {
     });
 };
 
+
+GAME.Dialogs.SaveOptionsState = function( options ) {
+    if ( !$.gmSupportsHTML5Storage() ) { return false; }
+	localStorage['wessense_land_options'] = JSON.stringify(options);
+};
+
+GAME.Dialogs.LoadOptionsState = function() {
+    if ( !$.gmSupportsHTML5Storage() ) { return false; }
+	var output = '';
+	try {
+        output = JSON.parse(localStorage['wessense_land_options']);
+    } catch (e) {
+        return false;
+    }
+    return output;
+};
