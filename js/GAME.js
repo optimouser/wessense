@@ -371,7 +371,9 @@ GAME.RunInit = function() {
     GAME.Display.RenderLand();
     GAME.Display.RenderObjects();
     GAME.Render();
-    amplify.publish('TURN_ENEMY_START');
+    setTimeout(function() {
+      amplify.publish('TURN_ENEMY_START');
+    }, 50);
   });
 
   amplify.subscribe('TURN_ENEMY_START', function() {
@@ -597,7 +599,7 @@ GAME.ProcessMonsterAction = function( monster, next_monster_move ) {
       }
       // move in the opposite side of nearest enemy
       monster.MoveTowardsOrAwayFromPoint( c.x, c.y, false );
-      next_monster_move();
+      setTimeout(next_monster_move, 50);
       break;
 
     case 'frenzied':
@@ -659,7 +661,7 @@ GAME.ProcessMonsterAction = function( monster, next_monster_move ) {
           } else {
             monster.MoveTowardsOrAwayFromPoint( GAME.player.mGameX, GAME.player.mGameY, true );
           }
-          next_monster_move();
+          setTimeout(next_monster_move, 50);
         }
       } else {
         //console.log('moving towards player');
@@ -675,7 +677,7 @@ GAME.ProcessMonsterAction = function( monster, next_monster_move ) {
             monster.MoveTowardsOrAwayFromPoint( c.x, c.y, true );
           }
         }
-        next_monster_move();
+        setTimeout(next_monster_move, 50);
       }
       break;
 
@@ -716,7 +718,7 @@ GAME.ProcessMonsterAction = function( monster, next_monster_move ) {
             monster.MoveTowardsOrAwayFromPoint( defender.mGameX, defender.mGameY, true ) ||
               monster.MoveTowardsOrAwayFromPoint( defender.mGameX, defender.mGameY, false );
           }
-          next_monster_move();
+          setTimeout(next_monster_move, 50);
         }
       } else if ( monster.mState === 'angered' ) {
         if ( monster.IsAdjacentEntity( GAME.player ) === true && monster.HasHTHAttack() === true ) {
@@ -738,7 +740,7 @@ GAME.ProcessMonsterAction = function( monster, next_monster_move ) {
           } else {
             monster.MoveTowardsOrAwayFromPoint( c.x, c.y, true );
           }
-          next_monster_move();
+          setTimeout(next_monster_move, 50);
         }
       } else {
         //console.log('player out of reach');
