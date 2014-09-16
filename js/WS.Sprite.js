@@ -323,12 +323,13 @@ WS.Sprite.prototype.SetCurrentAnimation = function( animation_name ) {
       new_progress = $.Deferred();
 
   this.animation_progress.done(function() {
-    // KISS: if more than one deferred enqueued, queue them to new progress :)
-    self.animation_progress.done(function() {
+    if (self.animation_progress.state() == 'pending') {
+      self.animation_progress.done(arguments.callee);
+    } else {
       self.animation_progress = new_progress;
       self.mCurrentAnimation = ( animation_name !== undefined ) ? animation_name : "";
       self.mAnimations[self.mCurrentAnimation].TimeReset();
-    })
+    }
   })
 
   return new_progress.promise();

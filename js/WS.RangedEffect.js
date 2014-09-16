@@ -38,11 +38,15 @@ WS.RangedEffect.prototype.start = function() {
 }
 
 WS.RangedEffect.prototype.UpdateEffect = function( dt ) {
+  if (!this.ranged_animation_progress) {
+    debugger;
+  }
   this.mCurPosX = this.mStartPosX + ( this.mStopPosX - this.mStartPosX ) * ( this.mTime / this.mMaxTime );
   this.mCurPosY = this.mStartPosY + ( this.mStopPosY - this.mStartPosY ) * ( this.mTime / this.mMaxTime );
   var result = this.Update( dt );
   if (result === true) {
     this.ranged_animation_progress.resolve();
+    this.ranged_animation_progress = undefined;
   }
   return result;
 };
