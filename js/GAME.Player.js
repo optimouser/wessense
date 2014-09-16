@@ -138,6 +138,8 @@ GAME.Player.prototype.CheckStartingLocation = function( x, y ) {
 
 
 GAME.Player.prototype.MoveToDXY = function( dx, dy ) {
+	if ( ( this.mGameX + dx ) < 1 || ( this.mGameX + dx ) > 511
+		|| ( this.mGameY + dy ) < 1 || ( this.mGameY + dy ) > 511 ) { return false; }
 	var c = { 'x': this.mGameX + dx, 'y': this.mGameY + dy };
 	var tile = GAME.MapGen.GetTile( c.x, c.y );
 	var obj  = GAME.MapGen.GetTerrainObject( c.x, c.y );

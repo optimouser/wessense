@@ -209,6 +209,55 @@ GAME.CreateEffects = function() {
 		]
 	});
 
+    this.effects['boom'] = new WS.Animation({ source_image: GAME.Images.Get('boom'),
+		speed: GAME.data['animation_speed'],
+        offset_x: 0, offset_y: 0,
+        frames: [
+            { x: 0, y:   0, w: 100, h: 200, t: 100 },
+            { x: 0, y: 200, w: 100, h: 200, t: 100 },
+            { x: 0, y: 400, w: 100, h: 200, t: 100 },
+            { x: 0, y: 600, w: 100, h: 200, t: 100 },
+            { x: 0, y: 800, w: 100, h: 200, t: 100 },
+            { x: 0, y:1000, w: 100, h: 200, t: 100 },
+            { x: 0, y:1200, w: 100, h: 200, t: 100 },
+            { x: 0, y:1400, w: 100, h: 200, t: 100 }
+		]
+	});
+
+    this.effects['small-lightning'] = new WS.Animation({ source_image: GAME.Images.Get('small-lightning'),
+		speed: GAME.data['animation_speed'],
+        offset_x: 0, offset_y: -36,
+        frames: [
+            { x: 0, y:   0, w: 72, h: 144, t: 100 },
+            { x: 0, y: 144, w: 72, h: 144, t: 100 },
+            { x: 0, y: 288, w: 72, h: 144, t: 100 },
+            { x: 0, y: 432, w: 72, h: 144, t: 100 },
+            { x: 0, y: 576, w: 72, h: 144, t: 100 },
+            { x: 0, y: 720, w: 72, h: 144, t: 100 },
+            { x: 0, y: 864, w: 72, h: 144, t: 100 },
+            { x: 0, y:1008, w: 72, h: 144, t: 100 }
+		]
+	});
+
+    this.effects['tornado-ring'] = new WS.Animation({ source_image: GAME.Images.Get('tornado-ring'),
+		speed: GAME.data['animation_speed'],
+        offset_x: 0, offset_y: 0,
+        frames: [
+            { x: 0, y:   0, w: 180, h: 216, t: 100 },
+            { x: 0, y: 216, w: 180, h: 216, t: 100 },
+            { x: 0, y: 432, w: 180, h: 216, t: 100 },
+            { x: 0, y: 648, w: 180, h: 216, t: 100 },
+            { x: 0, y: 864, w: 180, h: 216, t: 100 },
+            { x: 0, y: 1080, w: 180, h: 216, t: 100 },
+            { x: 0, y: 1296, w: 180, h: 216, t: 100 },
+            { x: 0, y: 1512, w: 180, h: 216, t: 100 },
+            { x: 0, y: 1728, w: 180, h: 216, t: 100 },
+            { x: 0, y: 1944, w: 180, h: 216, t: 100 },
+            { x: 0, y: 2160, w: 180, h: 216, t: 100 }
+		]
+	});
+
+
     this.effects['water'] = new WS.Animation({ source_image: GAME.Images.Get('water'),
 		speed: GAME.data['animation_speed'],
         offset_x: 0, offset_y: 0,

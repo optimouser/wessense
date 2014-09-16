@@ -432,19 +432,19 @@ WS.Entity.prototype.AttackHandToHand = function( entity ) {
 			this.EntityKilled( entity );
 			break;
 		}
-		if ( this.mPoisonAttack === true && entity.mIsPoisoned === false && $.gmRndInt(0,100) < 33 ) {
+		if ( this.mPoisonAttack === true && entity.mIsPoisoned === false && $.gmRndInt(0,100) < 20 ) {
 			entity.SetTrait('poisoned');
 			if ( entity.mType === 'player' ) {
 				GAME.Notifications.Post('You have been poisoned by ' + this.mName, 'bad');
 			}
 		}
-		if ( this.mEntangleAttack === true && entity.mIsEntangled === false && $.gmRndInt(0,100) < 25 ) {
+		if ( this.mEntangleAttack === true && entity.mIsEntangled === false && $.gmRndInt(0,100) < 20 ) {
 			entity.SetTrait('entangled');
 			if ( entity.mType === 'player' ) {
 				GAME.Notifications.Post('You have been entangled by ' + this.mName, 'bad');
 			}
 		}
-		if ( entity.mIsBleeding === false && $.gmRndInt(0,100) < 5 ) {
+		if ( entity.mIsBleeding === false && $.gmRndInt(0,100) < 50 ) {
 			entity.SetTrait('bleeding');
 			if ( entity.mType === 'player' ) {
 				GAME.Notifications.Post(this.mName + ' seriously wounded you', 'bad');
@@ -466,7 +466,6 @@ WS.Entity.prototype.AttackRanged = function( entity ) {
 		//console.log( 'def: ' + dmg );
 
 		dmg = Math.ceil( dmg );
-		//console.log( 'fin: ' + dmg );
 
 		entity.mHP[0] -= dmg;
 		if ( entity.mType === 'monster' && ( this.mType === 'player' || entity.mState === 'neutral' ) ) {
@@ -596,9 +595,7 @@ WS.Entity.prototype.MoveTowardsOrAwayFromPoint = function( x0, y0, towards ) {
 		if ($.gmRndInt(0,1) === 0) { dx = 0; } else { dy = 0; } 
 	}
 	// try making a step
-	this.MoveToDXY(dx, dy);
-
-    return true;
+	return this.MoveToDXY(dx, dy);
 };
 
 WS.Entity.prototype.MoveRandomly = function() {
@@ -610,6 +607,9 @@ WS.Entity.prototype.MoveRandomly = function() {
 };
 
 WS.Entity.prototype.MoveToDXY = function( dx, dy ) {
+    if ( ( this.mGameX + dx ) < 1 || ( this.mGameX + dx ) > 511
+        || ( this.mGameY + dy ) < 1 || ( this.mGameY + dy ) > 511 ) { return false; }
+
     var c = { 'x': this.mGameX + dx, 'y': this.mGameY + dy };
 	var pc = GAME.player.GetGameXY();
 

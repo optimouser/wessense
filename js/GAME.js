@@ -1,6 +1,6 @@
 
 var GAME = GAME || {
-	REVISION: '0.86a',
+	REVISION: '0.87a',
 	data: { 'role': 'role_1_0', 'houses': 0, 'mines': 0, 'monoliths': 0, 
 		'hostage': $.gmRndInt(0,1) == 0 ? 'elven_princess' : 'elder_mage',
 		'enemy': $.gmRndInt(0,1) == 0 ? 'necromancer' : 'lich',
@@ -21,6 +21,7 @@ var GAME = GAME || {
 
 	mSpellFlyingCountDown: 0,
 	mSpellShadowsCountDown: 0,
+	mSpellLearnLvl: 0,
 
 	mAnimationLoopID: undefined,
 	mLoopLastTimeUpdated: Date.now(),
@@ -125,18 +126,18 @@ GAME.RunInit = function() {
 	//console.log(GAME.player.mStats);
 	
 	if ( GAME.data['role'] === 'role_1_0' ) {
-		GAME.player.mMagic.mirror 	= 4;
+		GAME.player.mMagic.mirror 	= 8;
 		GAME.player.mMagic.heal 	= 8;
 	} else if ( GAME.data['role'] === 'role_1_1' ) {
-		GAME.player.mMagic.mirror 	= 12;
+		GAME.player.mMagic.mirror 	= 6;
 		GAME.player.mMagic.rain 	= 0;
 		GAME.player.mMagic.fly 		= 0;
-		GAME.player.mMagic.sleep	= 12;
-		GAME.player.mMagic.tornado 	= 0;
-		GAME.player.mMagic.frenzy 	= 6;
+		GAME.player.mMagic.sleep	= 6;
+		GAME.player.mMagic.tornado 	= 3;
+		GAME.player.mMagic.frenzy 	= 0;
 		GAME.player.mMagic.entangle = 6;
 		GAME.player.mMagic.heal 	= 6;
-		GAME.player.mMagic.charm 	= 3;
+		GAME.player.mMagic.charm 	= 6;
 		GAME.player.mMagic.forest 	= 0;
 		GAME.player.mMagic.meteor 	= 0;
 		GAME.player.mMagic.shadows 	= 0;
@@ -145,15 +146,20 @@ GAME.RunInit = function() {
 		GAME.player.mMagic.heal 	= 4;
 	} else if ( GAME.data['role'] === 'role_2_1' ) {
 		GAME.player.mMagic.entangle = 8;
-		GAME.player.mMagic.heal 	= 4;
+		GAME.player.mMagic.rain 	= 8;
+		GAME.player.mMagic.heal 	= 8;
+		GAME.player.mMagic.sleep	= 8;
 	} else if ( GAME.data['role'] === 'role_3_0' ) {
 		GAME.player.mMagic.tornado 	= 4;
+		GAME.player.mMagic.frenzy 	= 4;
 	} else if ( GAME.data['role'] === 'role_3_1' ) {
 		GAME.player.mMagic.meteor 	= 4;
+		GAME.player.mMagic.fly 		= 2;
 	} else if ( GAME.data['role'] === 'role_4_0' ) {
 		GAME.player.mMagic.sleep	= 4;
 		GAME.player.mMagic.shadows 	= 8;
 	} else if ( GAME.data['role'] === 'role_4_1') {
+		GAME.player.mMagic.sleep	= 4;
 		GAME.player.mMagic.frenzy 	= 4;
 		GAME.player.mMagic.heal 	= 8;
 	}
@@ -415,6 +421,9 @@ GAME.RunInit = function() {
 			var monsters = GAME.Monsters.Find( pcoord.x - 15, pcoord.y - 15, pcoord.x + 15, pcoord.y + 15 );
 
 			$.each(monsters, function( i, monster ) {
+				if ( monster.died === undefined ) {
+					monster.TurnPassed();
+				}
 				GAME.mMQ.queue('monster_move_queue', function( next_monster_move ) {
 					if ( monster.died === undefined ) {
 						GAME.ProcessMonsterAction( monster, function() { next_monster_move(); });
@@ -507,6 +516,7 @@ GAME.RunInit = function() {
 };
 
 GAME.EntityAttacksEntityHTH = function( attacker, defender, next_monster_move ) {
+	this.mDisableControls = true;
 
 	if ( attacker.mGameX > defender.mGameX ) { attacker.SetFlipX(true); } else { attacker.SetFlipX(false); }
 	if ( defender.mGameX > attacker.mGameX ) { defender.SetFlipX(true); } else { defender.SetFlipX(false); }
@@ -541,6 +551,7 @@ GAME.EntityAttacksEntityHTH = function( attacker, defender, next_monster_move ) 
 	GAME.mMQ.queue('monster_action_queue', function( next_monster_action ) {
 		next_monster_action();
 		//console.log('last monster action, moving to next monster');
+		GAME.mDisableControls = false;
 		next_monster_move();
 	});
 
@@ -548,6 +559,8 @@ GAME.EntityAttacksEntityHTH = function( attacker, defender, next_monster_move ) 
 };
 
 GAME.EntityAttacksEntityRNG = function( attacker, defender, next_monster_move ) {
+	this.mDisableControls = true; // do not allow controls until attack ends..
+
 //	console.log('ranged attack performed');
 	if ( attacker.mGameX > defender.mGameX ) { attacker.SetFlipX(true); } else { attacker.SetFlipX(false); }
 	if ( defender.mGameX > attacker.mGameX ) { defender.SetFlipX(true); } else { defender.SetFlipX(false); }
@@ -603,6 +616,7 @@ GAME.EntityAttacksEntityRNG = function( attacker, defender, next_monster_move ) 
 	GAME.mMQ.queue('monster_action_queue', function( next_monster_action ) {
 		next_monster_action();
 //		console.log('monster actions ended');
+		GAME.mDisableControls = false;
 		next_monster_move();
 	});
 
@@ -613,14 +627,16 @@ GAME.ProcessMonsterAction = function( monster, next_monster_move ) {
 
 	if ( monster.mRegeneration !== undefined && monster.mHP[0] < monster.mHP[1] ) {
 		// normal regeneration 
-		var hp = ( monster.mHP[1] - monster.mHP[0] < monster.mRegeneration ) ? ( monster.mHP[1] - monster.mHP[0] ) : monster.mRegeneration;
+		var hp = monster.mHP[1] - monster.mHP[0];
+		if ( hp > monster.mRegeneration ) { hp = monster.mRegeneration; }
 		monster.mHP[0] += hp
 		if ( monster.IsOffScreen() === false ) {
 			GAME.AddTextAnimation('+'+hp+' HP regenerated', monster.mGameX, monster.mGameY, '#0E0');
 		}
 	} else if ( GAME.mTime.GetTimeOfDay() === 'night' && monster.mIsUndead === true && monster.mHP[0] < monster.mHP[1] ) {
 		// undead regenerate at night...
-		var hp = ( ( monster.mHP[1] - monster.mHP[0] ) < 8 ) ? ( monster.mHP[1] - monster.mHP[0] ) : 8;
+		var hp = monster.mHP[1] - monster.mHP[0];
+		if ( hp > 8 ) { hp = 8; }
 		monster.mHP[0] += hp
 		if ( monster.IsOffScreen() === false ) {
 			GAME.AddTextAnimation('+'+hp+' HP restored', monster.mGameX, monster.mGameY, '#090');
@@ -762,7 +778,9 @@ GAME.ProcessMonsterAction = function( monster, next_monster_move ) {
 						c = path.shift();
 						monster.MoveTowardsOrAwayFromPoint( c[0], c[1], true );
 					} else {
-						monster.MoveTowardsOrAwayFromPoint( defender.mGameX, defender.mGameY, true );
+						if ( monster.MoveTowardsOrAwayFromPoint( defender.mGameX, defender.mGameY, true ) === false ) {
+							 monster.MoveTowardsOrAwayFromPoint( defender.mGameX, defender.mGameY, false );
+						}
 					}
 					next_monster_move();
 				}
@@ -858,7 +876,7 @@ GAME.ResurrectHero = function() {
 	if ( gp.mNRNG > 0 ) { gp.mRNG *= 0.9; gp.mRNG = Math.ceil( gp.mRNG ); }
 
 	// decrease hit points	
-	if ( gp.mHP[1] > 10 ) { gp.mHP[1] -= 5; gp.mHP[0] = gp.mHP[1]; }
+	if ( gp.mHP[1] > 10 ) { gp.mHP[1] -= parseInt( gp.mHP[1] / 10 ); gp.mHP[0] = gp.mHP[1]; }
 
     // decrease defense
 	if ( gp.mDEF > 0 ) { gp.mDEF *= 0.9; gp.mDEF = Math.ceil( gp.mDEF ); }
@@ -1122,7 +1140,7 @@ GAME.SpellTornado = function() {
 		m.mHP[0] -= dmg;
 		GAME.AddTextAnimation('-'+parseInt(dmg)+' HP', m.mGameX, m.mGameY, '#E00');
 	}
-	GAME.player.AddEffect( $.extend( {}, GAME.effects['magicshield'] ) );
+	GAME.player.AddEffect( $.extend( {}, GAME.effects['tornado-ring'] ) );
 
 	GAME.Notifications.Post('Mighty tornado rushed through the area', 'good');
 	GAME.Display.RenderLand();
@@ -1172,15 +1190,20 @@ GAME.SpellRain = function( c, pc ) {
 
 	tile = GAME.Tiles.GetAtXY(pc.x + c.x, pc.y + c.y);
 
-	var forest_name = undefined;
 	for (var x = -2; x <= 2; x++ ) {
 		for (var y = -2; y <= 2; y++) {
 			if ( ( x === -2 && y === -2 ) || ( x === -2 && y === 2 ) || ( x === 2 && y === -2 ) || ( x === 2 && y === 2 ) ) { continue; }
-			tile = GAME.Tiles.GetAtXY(pc.x + c.x + x, pc.y + c.y + y);
-			if ( tile.startsWith('water') || tile.startsWith('swamp') ) { continue; } 
+			var monster = GAME.Monsters.IsMonsterThere( pc.x + c.x + x, pc.y + c.y + y );
+			if ( monster !== false ) { // monster
+				var dmg = monster.mHP[0] * $.gmRnd(0.5, 0.75); 
+				monster.mHP[0] -= dmg;
+				monster.AddEffect( $.extend( {}, GAME.effects['small-lightning'] ) );
+				GAME.AddTextAnimation('-'+parseInt(dmg)+' HP', monster.mGameX, monster.mGameY, '#E00');
+			}
 			obj = GAME.Objects.GetTerrainAtXY( pc.x + c.x + x, pc.y + c.y + y );
 			if ( obj !== undefined && ( obj.t.startsWith('house') || obj.t === 'mine'|| obj.t === 'monolith' ) ) { continue; }
-			if ( GAME.Monsters.IsMonsterThere( pc.x + c.x + x, pc.y + c.y + y ) !== false ) { continue; } // monster
+			tile = GAME.Tiles.GetAtXY(pc.x + c.x + x, pc.y + c.y + y);
+			if ( tile.startsWith('water') || tile.startsWith('swamp') ) { continue; } 
 			if ( x === 0 && y === 0 && c.x === 0 && c.y === 0 ) { continue; } // player
 			GAME.Tiles.SetAtXY( 'water_shallow', pc.x + c.x + x, pc.y + c.y + y );
 			GAME.Objects.Destroy( pc.x + c.x + x, pc.y + c.y + y );
@@ -1191,7 +1214,6 @@ GAME.SpellRain = function( c, pc ) {
 		for (var y = -1; y <= 1; y++) {
 			obj = GAME.Objects.GetTerrainAtXY( pc.x + c.x + x, pc.y + c.y + y );
 			if ( obj !== undefined && ( obj.t.startsWith('house') || obj.t === 'mine'|| obj.t === 'monolith' ) ) { continue; }
-			if ( GAME.Monsters.IsMonsterThere( pc.x + c.x + x, pc.y + c.y + y ) !== false ) { continue; } // monster
 			if ( x === 0 && y === 0 && c.x === 0 && c.y === 0 ) { continue; } // player
 			GAME.Tiles.SetAtXY( 'water_medium', pc.x + c.x + x, pc.y + c.y + y );
 			GAME.Objects.Destroy( pc.x + c.x + x, pc.y + c.y + y );
@@ -1271,6 +1293,7 @@ GAME.SpellMeteor = function( c, pc ) {
 			if ( monster !== false ) {
 				var dmg = monster.mHP[0] * $.gmRnd(0.75, 0.95); 
 				monster.mHP[0] -= dmg;
+				monster.AddEffect( $.extend( {}, GAME.effects['boom'] ) );
 				GAME.AddTextAnimation('-'+parseInt(dmg)+' HP', monster.mGameX, monster.mGameY, '#E00');
 				GAME.Tiles.SetAtXY( 'sand', pc.x + c.x + x, pc.y + c.y + y );
 				GAME.Objects.Destroy( pc.x + c.x + x, pc.y + c.y + y );
