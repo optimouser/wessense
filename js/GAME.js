@@ -529,8 +529,8 @@ GAME.EntityAttacksEntityHTH = function( attacker, defender, next_monster_move ) 
   attacker.SetFlipX(attacker.mGameX > defender.mGameX);
   defender.SetFlipX(defender.mGameX > attacker.mGameX);
 
-  var attack_anim = attacker.SetCurrentAnimation('attack'),
-      defend_anim = defender.SetCurrentAnimation('defend');
+  var attack_anim = !attacker.IsOffScreen() && attacker.SetCurrentAnimation('attack'),
+      defend_anim = !defender.IsOffScreen() && defender.SetCurrentAnimation('defend');
 
   $.when(attack_anim, defend_anim).done(function() {
     attacker.AttackHandToHand( defender );
@@ -550,8 +550,8 @@ GAME.EntityAttacksEntityRNG = function( attacker, defender, next_monster_move ) 
       start = GAME.Display.WorldTileToScreenXY( attacker.mGameX, attacker.mGameY ),
       stop  = GAME.Display.WorldTileToScreenXY( defender.mGameX, defender.mGameY );
   effect.SetStartStopXY( 0, 0, stop.x - start.x, stop.y - start.y );
-  var attack_anim = attacker.SetRangedEffect(effect),
-      defend_anim = defender.SetCurrentAnimation('defend');
+  var attack_anim = !attacker.IsOffScreen() && attacker.SetRangedEffect(effect),
+      defend_anim = !defender.IsOffScreen() && defender.SetCurrentAnimation('defend');
 
   $.when(attack_anim, defend_anim).done(function() {
     attacker.AttackRanged( defender );
@@ -665,7 +665,7 @@ GAME.ProcessMonsterAction = function( monster, next_monster_move ) {
         }
       } else {
         //console.log('moving towards player');
-        if ( dist < 1.5 ) {
+        if ( dist < 2 ) {
           monster.MoveTowardsOrAwayFromPoint( c.x, c.y, false );
         } else if ( dist < 10.0 ) {
           var path = monster.GetPossiblePathToXY( c.x, c.y );
@@ -856,6 +856,29 @@ GAME.Update = function(dt) {
       GAME.player.GetXP( GAME.player.GetLvlExp( GAME.player.mLVL ) - GAME.player.mEXP );
       this.mLastKeyPress = 0;
       key_pressed = true;
+    }
+
+    if ( key.isPressed('k') ) {
+      var c = GAME.player.GetGameXY();
+      function ring(radius, fx) {
+        for (var i = 0; i < radius * 2; i++) {
+          fx(c.x - radius + i, c.y + radius);
+          fx(c.x - radius + i, c.y - radius);
+          fx(c.x - radius, c.y - radius + i);
+          fx(c.x + radius, c.y - radius + i);
+        }
+      }
+      ring(15, function(x, y) {
+        GAME.Monsters.CreatePlayerCopy(x, y);
+      })
+      var units = $.map(GAME.Monsters.mUnits, function(v, k) {return k})
+      var u = $.gmShuffleArray(units)[0];
+      ring(16, function(x, y) {
+        if ((x + y) % 2 == 0) {
+          GAME.Monsters.Create(u, x, y, false);
+        }
+      })
+      mLastKeyPress = 0;
     }
 
     if ( key.isPressed('space') ) {
